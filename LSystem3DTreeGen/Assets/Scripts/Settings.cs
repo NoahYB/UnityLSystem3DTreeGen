@@ -5,8 +5,8 @@ using UnityEngine;
 public static class Settings
 {
     public static float width_ratio = .7f;
-    public static float line_length = 20;
-    public static float delta = 33f;
+    public static float line_length = 40;
+    public static float delta = 45f;
     public static float delta_range = 30f;
     public static float leaf_size = 4;
     public static float trunk_size = .005f; 
@@ -14,8 +14,8 @@ public static class Settings
     public static string[] alphabet_rules;
     public static char[] corresponding_character;
 
-    public static string initial = "FA";
-    public static int generations = 5;
+    public static string initial = "FAFFA";
+    public static int generations = 4;
 
     public static int animation_speed = 1;
 
@@ -28,12 +28,19 @@ public static class Settings
     public static Dictionary<Module, List<Module>> alphabet = new Dictionary<Module, List<Module>>
     {
     };
-    public static Dictionary<char, string> alphabetNonParametric = new Dictionary< char, string>
+    public static Dictionary<char, string> alphabetNonParametric2 = new Dictionary< char, string>
     {
-        {'A',  "[&FL!A]/////’[&FL!A]///////’[&FL!A]" },
+        {'A',  "[&FL!A]/////’[&FL!A]///////’[&FL!A]//////’[&FL!A]" },
         { 'F', "S ///// F" },
         { 'S', "F" },
         { 'L', "[’’’^^-f+f+f-|-f+f+f]" }
+    };
+    public static Dictionary<char, string> alphabetNonParametric = new Dictionary<char, string>
+    {
+        {'A',  "[&FL!A]/+////’[&FL!A]/////--//’[&FL!A]///+///’[&FL!A]" },
+        { 'F', "S ///// F" },
+        { 'S', "F" },
+        { 'L', "[L’’’^^-f+f+f-|-f+f+f]" }
     };
     //w. ! : B(2)A(4; 4)
     //p1: A(x; y) : y <= 3! A(x * 2; x + y)

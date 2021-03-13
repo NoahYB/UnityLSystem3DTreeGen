@@ -16,8 +16,7 @@ public class CreateTreeMesh : MonoBehaviour
 
     private List<Vector3> vertices;
 
-    
-    // Start is called before the first frame update
+
     public struct MeshInfo
     {
         public Vector3[] vertices;
@@ -32,44 +31,77 @@ public class CreateTreeMesh : MonoBehaviour
         vertices = new List<Vector3>();
         gs = new List<GameObject>();
         vs = new List<(Vector3, Transform)>();
-        print("count = " + turtleTransforms.Count);
+        //print("count = " + turtleTransforms.Count);
         vs.Add((turtleTransforms[0].position,turtleTransforms[0]));
         for (int i = 0; i < turtleTransforms.Count; i++)
         {
 
-            print("Turtle " + i + " UP Vector = " + turtleTransforms[i].position);
+            //print("Turtle " + i + " UP Vector = " + turtleTransforms[i].position);
             if (i == turtleTransforms.Count-1)
             {
-                print(turtleTransforms[i].position);
                 vs.Add((turtleTransforms[i].position, turtleTransforms[i]));
             }
-            else
+            
+            else if(!turtleTransforms[i+1].name.Equals("LEAF"))
             {
-                print("TURTLE POSITION NOT FINAL = " + turtleTransforms[i].position);
+                
                 Debug.DrawLine(turtleTransforms[i].position, turtleTransforms[i + 1].position, Color.cyan, 1000);
-                Vector3 pos = turtleTransforms[i + 1].position - (turtleTransforms[i].up);
+                Vector3 pos = turtleTransforms[i + 1].position - (.5f *turtleTransforms[i].up);
                 Quaternion rot = turtleTransforms[i].rotation;
-                Vector3 pos2 = turtleTransforms[i + 1].position + (turtleTransforms[i + 1].up);
+                Vector3 pos2 = turtleTransforms[i + 1].position + (.5f * turtleTransforms[i + 1].up);
                 Quaternion rot2 = turtleTransforms[i + 1].rotation;
                 Transform t = Instantiate(transformPrefab.transform, pos, rot);
                 Transform t2 = Instantiate(transformPrefab.transform, pos2, rot2);
                 vs.AddRange(GetBendedPoints(t, t2));
+                Destroy(t.gameObject);
+                Destroy(t2.gameObject);
+            }
+            //else
+            //{
+            //    Debug.DrawLine(turtleTransforms[i].position, turtleTransforms[i + 1].position, Color.cyan, 1000);
+            //    Vector3 pos = turtleTransforms[i + 1].position - (.5f * Settings.line_length *turtleTransforms[i].up);
+            //    Quaternion rot = turtleTransforms[i].rotation;
+            //    Vector3 pos2 = turtleTransforms[i + 1].position + (turtleTransforms[i + 1].up);
+            //    Quaternion rot2 = turtleTransforms[i + 1].rotation;
+            //    Transform t = Instantiate(transformPrefab.transform, pos, rot);
+            //    Transform t2 = Instantiate(transformPrefab.transform, pos2, rot2);
+            //    vs.AddRange(GetBendedPoints(t, t2));
+            //    Destroy(t.gameObject);
+            //    Destroy(t2.gameObject);
+            //}
+            if (turtleTransforms[i].name.Equals("LEAF"))
+            {
+                print(turtleTransforms[i].name);
+                print(turtleTransforms.Count - 1);
+                print(i);
             }
 
         }
-        int p = 1;
+        int p = 0;
         foreach ((Vector3, Transform) v in vs)
         {
             GameObject ig = Instantiate(transformPrefab);
             ig.transform.position = v.Item1;
             ig.transform.rotation = v.Item2.transform.rotation;
             gs.Add(ig);
-            vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 300/Vector3.Distance(initialPosition,ig.transform.position)));
+            if(p == vs.Count-1)
+            {
+                vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 200 / Vector3.Distance(initialPosition, ig.transform.position)));
+            }
+            else
+            {
+                vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 300 / Vector3.Distance(initialPosition, ig.transform.position)));
+            }
+            Destroy(ig);
             p++;
         }
         MeshInfo mInfo = new MeshInfo();
         mInfo.vertices = vertices.ToArray();
         mInfo.triangles = CreateTriangles(mInfo.vertices);
+        for(int i = 0; i < turtleTransforms.Count; i++)
+        {
+            Destroy(turtleTransforms[i].gameObject);
+        }
         return mInfo;
     }
     // Update is called once per frame
@@ -79,8 +111,14 @@ public class CreateTreeMesh : MonoBehaviour
     int[] CreateTriangles(Vector3[] vertices)
     {
         List<int> triangleList = new List<int>();
-        for (int i = 0; i < vertices.Length - 20; ++i)
+        for (int i = 0; i < vertices.Length-20; ++i)
         {
+            //if (i >= vertices.Length - 20)
+            //{
+            //    triangleList.Add(i); //A
+            //    triangleList.Add(i + 1);//B
+            //    triangleList.Add(vertices.Length - 1);//C
+            //}
             if (i % 20 == 19)
             {
                 triangleList.Add(i);
@@ -118,6 +156,7 @@ public class CreateTreeMesh : MonoBehaviour
         }
         return triangle_array;
     }
+    //https://stackoverflow.com/a/25182327/13636237
     List<(Vector3, Transform tr)> GetBendedPoints(Transform tOne, Transform tTwo)
     {
         List<(Vector3, Transform)> vList = new List<(Vector3, Transform)>();
@@ -137,6 +176,7 @@ public class CreateTreeMesh : MonoBehaviour
             Vector3 pPos = A0 + (A1 * tStep) + (A2 * tStep * tStep) + (A3 * tStep * tStep * tStep);
             vList.Add((pPos, trans));
             tStep += .1f;
+            Destroy(trans.gameObject);
         }
         return vList;
     }
@@ -155,9 +195,10 @@ public class CreateTreeMesh : MonoBehaviour
             pos += transform.position;
             vertexPositions.Add(pos);
             rotations.Add(transform.rotation);
-            GameObject p = Instantiate(transformPrefab);
-            p.transform.position = pos;
-            p.transform.rotation = transform.rotation;
+            //GameObject p = Instantiate(transformPrefab);
+            //p.transform.position = pos;
+            //p.transform.rotation = transform.rotation;
+            //Destroy(p);
         }
         return vertexPositions;
     }

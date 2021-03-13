@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.IO;
 
 public class StaticGenerator : MonoBehaviour
 {
@@ -74,7 +75,7 @@ public class StaticGenerator : MonoBehaviour
         starting_width = 2f;
         /*Lsystem, Initializing class and getting vectors of tree
          */
-        LSystem tree_system = new LSystem("FA", generations, Settings.alphabetNonParametric);
+        LSystem tree_system = new LSystem("FA", generations, Settings.alphabetNonParametric2);
         SYSTEM = tree_system.calculate_system();
 
         interpert_system(SYSTEM, delta, turtle_transform);
@@ -117,13 +118,9 @@ public class StaticGenerator : MonoBehaviour
 
                 Vector3 axis = Vector3.Cross(turtle.transform.up.normalized, tropismVector);
 
-                float tropismAngle = Mathf.Rad2Deg * .6f * axis.magnitude;
+                float tropismAngle = Mathf.Rad2Deg * .3f * axis.magnitude;
 
                 Transform oldTurtle = CopyTransform(turtle.transform);
-
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-                sphere.transform.position = oldTurtle.position;
 
                 turtle.transform.Rotate(axis, tropismAngle);
 
@@ -134,6 +131,7 @@ public class StaticGenerator : MonoBehaviour
                 Debug.DrawLine(oldTurtle.position, turtle.transform.position, Color.red, 200);
 
                 old_width = starting_width;
+
                 lastTurtleTransformWhenFOccured = CopyTransform(turtle.transform);
             }
             else if (character == 'L')
@@ -142,13 +140,17 @@ public class StaticGenerator : MonoBehaviour
                 Vector3 old_pos = turtle.transform.position;
 
                 GameObject new_point = Instantiate(leaf);
-                turtleTransforms.Add(CopyTransform(turtle.transform));
+                Transform leafNotifier = CopyTransform(turtle.transform);
+                leafNotifier.name = "LEAF";
+                lastTurtleTransformWhenFOccured = leafNotifier;
+                //turtleTransforms.Add(leafNotifier);
+
                 new_point.transform.localScale = new Vector3(10f, 10f, 10f);
                 new_point.transform.rotation = turtle.transform.rotation;
                 new_point.transform.up = turtle.transform.up;
-                Vector3 pos = turtle.transform.position + (line_length / 2) * turtle.transform.up;
+                Vector3 pos = turtle.transform.position;
                 new_point.transform.position = pos;
-                lastTurtleTransformWhenFOccured = CopyTransform(turtle.transform);
+                new_point.transform.parent = leafParent.transform;
 
             }
             else if (character == 'f')
@@ -234,6 +236,7 @@ public class StaticGenerator : MonoBehaviour
 
                 finalSegMesh.RecalculateNormals();
                 finalSegMesh.RecalculateBounds();
+                segment.transform.parent = this.transform;
 
                 turtle_info turtleInfo = stack.Pop();
 
@@ -268,6 +271,14 @@ public class StaticGenerator : MonoBehaviour
 
         segMesh.RecalculateNormals();
         segMesh.RecalculateBounds();
+
+
+
+        CombineMeshes(gameObject, false);
+        CombineMeshes(leafParent, false);
+
+        ExportObj(gameObject,"tree");
+        ExportObj(leafParent,"leafs");
     }
     Transform CopyTransform(Transform t)
     {
@@ -284,7 +295,6 @@ public class StaticGenerator : MonoBehaviour
             combine[i].mesh = meshFilters[i].sharedMesh;
             combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
             meshFilters[i].gameObject.SetActive(false);
-
             i++;
         }
         parent.GetComponent<MeshFilter>().mesh = new Mesh();
@@ -292,6 +302,10 @@ public class StaticGenerator : MonoBehaviour
         if (fall)
         {
             parent.GetComponent<Renderer>().material.color = Settings.fall_colors[UnityEngine.Random.Range(0, 3)];
+        }
+        foreach (Transform child in parent.transform)
+        {
+            GameObject.Destroy(child.gameObject);
         }
         parent.gameObject.SetActive(true);
     }
@@ -316,5 +330,19 @@ public class StaticGenerator : MonoBehaviour
         sC.transform.position = turtle.transform.position;
         sC.transform.rotation = turtle.transform.rotation;
         sC.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width, previousTop,20);
+    }
+    void ExportObj(GameObject g, string name)
+    {
+        string path = "/Users/nybri/Desktop";
+        path = Path.Combine(path, name + ".obj");
+
+        //Create Directory if it does not exist
+        if (!Directory.Exists(Path.GetDirectoryName(path)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+        }
+
+        MeshFilter meshFilter = g.GetComponent<MeshFilter>();
+        ObjExporter.MeshToFile(meshFilter, path);
     }
 }
