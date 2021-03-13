@@ -5,9 +5,11 @@
 ![Screenshot (41)](https://user-images.githubusercontent.com/37704804/111038557-8e669d00-83de-11eb-81cc-4763b5c8086f.png)
 ![Screenshot (64)](https://user-images.githubusercontent.com/37704804/111038566-94f51480-83de-11eb-9434-3e1c859d978f.png)
 # LSystem3DTreeGen
-Program that creates 3D L Systems in Unity mainly to be used for creating trees 
-examples shown above:
-TODO:
-Finish Parametric L System,
-Keep improving mesh generation,
-Memoization of turtle interpertations (something like this: https://mzucker.github.io/2020/03/28/optimizing-lsystems.html)
+Program that creates 3D L Systems in Unity mainly to be used for creating trees <br />
+examples shown above <br />
+TODO:<br />
+  Finish Parametric L System,<br />
+  Keep improving mesh generation,<br />
+  Memoization of turtle interpertations (something like this: https://mzucker.github.io/2020/03/28/optimizing-lsystems.html)<br />
+  Create UI for customization of trees and shapes<br />
+  Add more example L Systems <br />
