@@ -23,7 +23,7 @@ public class ParametricGenerator : MonoBehaviour
     public GameObject trunkGroup;
     List<Transform> pointsForLine;
     public GameObject segmentCreator;
-    string SYSTEM;
+    List<Module> SYSTEM;
 
     // possible mesh building
     List<mesh_info> mesh_infos = new List<mesh_info>();
@@ -70,8 +70,8 @@ public class ParametricGenerator : MonoBehaviour
         starting_width = 2f;
         /*Lsystem, Initializing class and getting vectors of tree
          */
-        LSystem tree_system = new LSystem("FA", generations, Settings.alphabetNonParametric);
-        SYSTEM = tree_system.calculate_system();
+        ParametricLSystem parametricLSystem = new ParametricLSystem(Settings.initialModuleForBendyTree, 10, Settings.moduleAlphabetForBendyTree);
+        SYSTEM = parametricLSystem.CalculateSystem();
 
         InterpertSystem(SYSTEM, delta, turtle_transform);
     }
@@ -89,7 +89,7 @@ public class ParametricGenerator : MonoBehaviour
             Init();
         }
     }
-    public void InterpertSystem(string SYSTEM, float delta, GameObject turtle)
+    public void InterpertSystem(List<Module> SYSTEM, float delta, GameObject turtle)
     {
         Vector3 heading = turtle.transform.up;
         Stack<turtle_info> stack = new Stack<turtle_info>();
@@ -105,27 +105,33 @@ public class ParametricGenerator : MonoBehaviour
 
         List<Vector3> previousTop = null;
         int index = 0;
-        foreach (char character in SYSTEM)
+        foreach (Module module in SYSTEM)
         {
-            if (character == 'F')
+            string name = module.GetName();
+            print(name);
+            if (name == "F")
             {
+
+                Transform oldTurtle = CopyTransform(turtle.transform);
                 Vector3 axis = Vector3.Cross(turtle.transform.up.normalized, tropismVector);
 
                 float tropismAngle = Mathf.Rad2Deg * .27f * axis.magnitude;
 
                 print(tropismAngle);
+
                 turtle.transform.Rotate(axis, tropismAngle);
 
-                CreateSegment(turtle, old_width, previousTop);
+                //CreateSegment(turtle, old_width, previousTop);
 
-                turtle.transform.position += line_length * turtle.transform.up;
+                turtle.transform.position += (module.parameters[0] * 3) * turtle.transform.up;
 
+                Debug.DrawLine(oldTurtle.position, turtle.transform.position, Color.red, 100f);
 
                 old_width = starting_width;
 
 
             }
-            else if (character == 'L')
+            else if (name == "L")
             {
                 info_to_add.position = turtle.transform.position;
                 info_to_add.width = starting_width;
@@ -142,53 +148,41 @@ public class ParametricGenerator : MonoBehaviour
                 new_point.transform.position = pos;
 
             }
-            else if (character == 'f')
+            else if (name == "f")
             {
                 turtle.transform.position += line_length * turtle.transform.up;
             }
-            else if (character == 'w')
+            else if (name == "!")
             {
                 starting_width *= width_ratio;
             }
-            else if (character == 'e')
-            {
-                starting_width /= width_ratio;
-            }
             //Pitch down(&) and up(^) by delta
-            else if (character == '&')
+            else if (name == "&")
             {
-                turtle.transform.Rotate(Vector3.right * (delta + UnityEngine.Random.Range(0, 5)));
+                turtle.transform.Rotate(Vector3.right * (module.parameters[0] + UnityEngine.Random.Range(0, 5)));
             }
-            else if (character == '^')
-            {
-                turtle.transform.Rotate(Vector3.left * (delta + UnityEngine.Random.Range(0, 5)));
-            }
+
             //roll right(/) and left(*) by delta
-            else if (character == '/')
+            else if (name == "/")
             {
-                turtle.transform.Rotate(Vector3.down * (delta + UnityEngine.Random.Range(0, 5)));
-            }
-            else if (character == '*')
-            {
-                turtle.transform.Rotate(Vector3.up * (delta + UnityEngine.Random.Range(0, 5)));
+                turtle.transform.Rotate(Vector3.down * (module.parameters[0] + UnityEngine.Random.Range(0, 5)));
             }
 
             //turn left(-) and right(+) by delta
-            else if (character == '+')
+            else if (name == "+")
             {
-                turtle.transform.Rotate(Vector3.back * -(delta + UnityEngine.Random.Range(0, 5)));
+                turtle.transform.Rotate(Vector3.back * -(module.parameters[0] + UnityEngine.Random.Range(0, 5)));
             }
-            else if (character == '-')
+            else if (name == "$")
             {
-                turtle.transform.Rotate(Vector3.forward * -(delta + UnityEngine.Random.Range(0, 5)));
+                turtle.transform.LookAt(Vector3.forward);
             }
-
-            else if (character == '|')
+            else if (name == "|")
             {
                 turtle.transform.Rotate(Vector3.up * (180));
             }
             //Copy turtle into the stack
-            else if (character == '[')
+            else if (name == "[")
             {
                 Vector3 position_to_copy;
                 Quaternion rotation_to_copy;
@@ -201,7 +195,7 @@ public class ParametricGenerator : MonoBehaviour
                 copy_info.width = starting_width;
                 stack.Push(copy_info);
             }
-            else if (character == ']')
+            else if (name == "]")
             {
                 i += 1;
 
@@ -221,7 +215,6 @@ public class ParametricGenerator : MonoBehaviour
             index += 1;
         }
         turtle.transform.position = initial_position;
-        TreeGenerate tree_generator = new TreeGenerate();
 
         Mesh tree_mesh = GetComponent<MeshFilter>().mesh;
     }
@@ -252,6 +245,10 @@ public class ParametricGenerator : MonoBehaviour
         GameObject sC = Instantiate(segmentCreator);
         sC.transform.position = turtle.transform.position;
         sC.transform.rotation = turtle.transform.rotation;
-        sC.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width, previousTop,10);
+        sC.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width,10);
+    }
+    Transform CopyTransform(Transform t)
+    {
+        return Instantiate(t.transform, t.transform.position, t.transform.rotation).transform;
     }
 }

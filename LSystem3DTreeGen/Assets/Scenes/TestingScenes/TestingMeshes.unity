@@ -136,7 +136,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 003582bc2cb97cf4bb394be85f3a87fa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -477
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 003582bc2cb97cf4bb394be85f3a87fa,
         type: 3}
@@ -550,7 +550,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.9245283, g: 0.74072, b: 0.40557134, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -676,7 +676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c03033104ce9604e883bc103118020c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tropismVector: {x: -0.3, y: 1, z: 0.3}
+  tropismVector: {x: 0, y: 0, z: 0}
   turtle_transform: {fileID: 1092036668}
   tree: {fileID: 3327357860028573123, guid: 8a2f36bcd31e9c645a7ad5f22c2ae395, type: 3}
   leaf: {fileID: 6632465492834932745, guid: af209c1f783de7845b7bd723dc31804e, type: 3}
@@ -866,7 +866,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: c50d7edd5dd2c5245b65774617c9ee0c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -477
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c50d7edd5dd2c5245b65774617c9ee0c,
         type: 3}

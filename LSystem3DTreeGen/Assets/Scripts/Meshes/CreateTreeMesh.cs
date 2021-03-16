@@ -32,21 +32,21 @@ public class CreateTreeMesh : MonoBehaviour
         gs = new List<GameObject>();
         vs = new List<(Vector3, Transform)>();
         //print("count = " + turtleTransforms.Count);
-        vs.Add((turtleTransforms[0].position,turtleTransforms[0]));
+        vs.Add((turtleTransforms[0].position, turtleTransforms[0]));
         for (int i = 0; i < turtleTransforms.Count; i++)
         {
 
             //print("Turtle " + i + " UP Vector = " + turtleTransforms[i].position);
-            if (i == turtleTransforms.Count-1)
+            if (i == turtleTransforms.Count - 1)
             {
                 vs.Add((turtleTransforms[i].position, turtleTransforms[i]));
             }
-            
-            else if(!turtleTransforms[i+1].name.Equals("LEAF"))
+
+            else if (!turtleTransforms[i + 1].name.Equals("LEAF"))
             {
-                
+
                 Debug.DrawLine(turtleTransforms[i].position, turtleTransforms[i + 1].position, Color.cyan, 1000);
-                Vector3 pos = turtleTransforms[i + 1].position - (.5f *turtleTransforms[i].up);
+                Vector3 pos = turtleTransforms[i + 1].position - (.5f * turtleTransforms[i].up);
                 Quaternion rot = turtleTransforms[i].rotation;
                 Vector3 pos2 = turtleTransforms[i + 1].position + (.5f * turtleTransforms[i + 1].up);
                 Quaternion rot2 = turtleTransforms[i + 1].rotation;
@@ -84,7 +84,7 @@ public class CreateTreeMesh : MonoBehaviour
             ig.transform.position = v.Item1;
             ig.transform.rotation = v.Item2.transform.rotation;
             gs.Add(ig);
-            if(p == vs.Count-1)
+            if (p == vs.Count - 1)
             {
                 vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 200 / Vector3.Distance(initialPosition, ig.transform.position)));
             }
@@ -98,7 +98,7 @@ public class CreateTreeMesh : MonoBehaviour
         MeshInfo mInfo = new MeshInfo();
         mInfo.vertices = vertices.ToArray();
         mInfo.triangles = CreateTriangles(mInfo.vertices);
-        for(int i = 0; i < turtleTransforms.Count; i++)
+        for (int i = 0; i < turtleTransforms.Count; i++)
         {
             Destroy(turtleTransforms[i].gameObject);
         }
@@ -111,7 +111,7 @@ public class CreateTreeMesh : MonoBehaviour
     int[] CreateTriangles(Vector3[] vertices)
     {
         List<int> triangleList = new List<int>();
-        for (int i = 0; i < vertices.Length-20; ++i)
+        for (int i = 0; i < vertices.Length - 20; ++i)
         {
             //if (i >= vertices.Length - 20)
             //{

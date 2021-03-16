@@ -8,7 +8,7 @@ public class ProceduralCone : MonoBehaviour
 	void Start()
     {
 	}
-    public List<Vector3> DrawCone(float bR, float tR, List<Vector3> oldTop, float height)
+    public List<Vector3> DrawCone(float bR, float tR, float height)
 	{
 		MeshFilter filter = gameObject.AddComponent<MeshFilter>();
 		Mesh mesh = filter.mesh;
@@ -33,10 +33,6 @@ public class ProceduralCone : MonoBehaviour
 		int vert = 0;
 		float _2pi = Mathf.PI * 2f;
 		// Bottom cap
-		foreach(Vector3 vPrint in oldTop)
-        {
-			print(vPrint);
-        }
 		vertices[vert++] = new Vector3(0f, 0f, 0f);
 		while (vert <= nbSides)
 		{

@@ -36,14 +36,4 @@ public class ParametricLSystem : MonoBehaviour
         }
         return SYSTEM;
     }
-    public void Start()
-    {
-
-        ParametricLSystem pSys3 = new ParametricLSystem(Settings.initialParametric, 2, Settings.moduleAlphabet);
-        foreach (Module s in pSys3.CalculateSystem())
-        {
-            print(s.CheckParametersAndName());
-        }
-    }
-
 }

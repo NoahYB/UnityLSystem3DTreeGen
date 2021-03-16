@@ -30,7 +30,6 @@ public class Module
         this.paramOneOperator = paramOneOperator;
         this.paramTwoOperator = paramTwoOperator;
         this.conditional = conditional;
-
     }
     public string GetName()
     {
@@ -51,24 +50,31 @@ public class Module
     public List<Module> ReturnSuccecors()
     {
         List<Module> successors = new List<Module>();
+        
         (string, bool) key = (name, CheckConditional(parameters[0], parameters[1]));
-
-        if (Settings.moduleAlphabet.ContainsKey(key))
+        
+        if (Settings.moduleAlphabetForBendyTree.ContainsKey(key))
         {
-            foreach (Module succesor in Settings.moduleAlphabet[key])
+            foreach (Module succesor in Settings.moduleAlphabetForBendyTree[key])
             {
+                
                 succesor.parameters = succesor.UpdateSuccesorParams(parameters[0], parameters[1]);
-                successors.Add(succesor);
+                successors.Add(CopyModule(succesor));
             }
         }
         else
-            successors.Add(this);
+        {
+            successors.Add(CopyModule(this));
+            Debug.Log("NAME OF NO SUC: " + this.name);
+        }
+            
 
         return successors;
     }
-    public void ParseFunction()
+    private Module CopyModule(Module m)
     {
-
+        Module nm = new Module(m.name, m.parameters, m.paramOneOperator, m.paramTwoOperator, m.conditional);
+        return nm;
     }
 }
 

@@ -227,7 +227,7 @@ public class StaticGenerator : MonoBehaviour
 
                 CreateTreeMesh TreeCreator = new CreateTreeMesh();
 
-                CreateTreeMesh.MeshInfo sMesh = TreeCreator.Init(turtleTransforms,initial_position);
+                CreateTreeMesh.MeshInfo sMesh = TreeCreator.Init(turtleTransforms, initial_position);
 
                 Mesh finalSegMesh = segment.GetComponent<MeshFilter>().mesh;
                 finalSegMesh.vertices = sMesh.vertices;
@@ -247,7 +247,7 @@ public class StaticGenerator : MonoBehaviour
                 turtleTransforms.Clear();
 
                 //turtleTransforms.Add(turtle.transform);
-                
+
 
             }
 
@@ -277,8 +277,8 @@ public class StaticGenerator : MonoBehaviour
         CombineMeshes(gameObject, false);
         CombineMeshes(leafParent, false);
 
-        ExportObj(gameObject,"tree");
-        ExportObj(leafParent,"leafs");
+        ExportObj(gameObject, "tree");
+        ExportObj(leafParent, "leafs");
     }
     Transform CopyTransform(Transform t)
     {
@@ -319,17 +319,17 @@ public class StaticGenerator : MonoBehaviour
             GameObject c2 = Instantiate(segmentCreator);
             c2.transform.position = turtle.transform.position;
 
-            t.transform.rotation = Quaternion.AngleAxis(d * j,turtle.transform.up);
-            
+            t.transform.rotation = Quaternion.AngleAxis(d * j, turtle.transform.up);
+
 
             c2.transform.rotation = t.transform.rotation;
 
-            c2.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width, previousTop,.1f);
+            c2.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width, .1f);
         }
         GameObject sC = Instantiate(segmentCreator);
         sC.transform.position = turtle.transform.position;
         sC.transform.rotation = turtle.transform.rotation;
-        sC.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width, previousTop,20);
+        sC.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width, 20);
     }
     void ExportObj(GameObject g, string name)
     {
