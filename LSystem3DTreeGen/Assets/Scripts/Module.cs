@@ -53,19 +53,19 @@ public class Module
         
         (string, bool) key = (name, CheckConditional(parameters[0], parameters[1]));
         
-        if (Settings.moduleAlphabetForBendyTree.ContainsKey(key))
+        if (Settings.moduleAlphabetForCircularTree.ContainsKey(key))
         {
-            foreach (Module succesor in Settings.moduleAlphabetForBendyTree[key])
+            foreach (Module succesor in Settings.moduleAlphabetForCircularTree[key])
             {
-                
-                succesor.parameters = succesor.UpdateSuccesorParams(parameters[0], parameters[1]);
-                successors.Add(CopyModule(succesor));
+                Module s = CopyModule(succesor);
+                s.parameters = s.UpdateSuccesorParams(parameters[0], parameters[1]);
+                successors.Add(s);
             }
         }
         else
         {
             successors.Add(CopyModule(this));
-            Debug.Log("NAME OF NO SUC: " + this.name);
+            //Debug.Log("NAME OF NO SUC: " + this.name);
         }
             
 

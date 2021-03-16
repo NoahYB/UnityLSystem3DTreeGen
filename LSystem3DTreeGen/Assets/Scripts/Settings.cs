@@ -89,7 +89,7 @@ public static class Settings
     public static string moduleRules = "!(w) F(l)[&(a0) B(l* r2, w* wr)]/(d) A(l* r1, w* wr)";
 
     public static List<Module> initialModuleForBendyTree
-        = new List<Module> { new Module ("A", new List<float> { 1, 10 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true) };
+        = new List<Module> { new Module("A", new List<float> { 1, 10 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true) };
 
     public static Dictionary<(string, bool), List<Module>> moduleAlphabetForBendyTree = new Dictionary<(string, bool), List<Module>>
     {
@@ -97,7 +97,7 @@ public static class Settings
                          new Module("!", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true),
                          new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
-                         new Module("&", new List<float> { 0, 0 }, (float v1, float v2) => 45, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("&", new List<float> { 0, 0 }, (float v1, float v2) => 30, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => .6f * v1, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true),
                          new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("/", new List<float> { 0, 0 }, (float v1, float v2) => 137.5f, (float v1, float v2) => v2, (float v1, float v2) => true),
@@ -107,8 +107,8 @@ public static class Settings
                          new Module("!", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true),
                          new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
-                         new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => -45, (float v1, float v2) => v2, (float v1, float v2) => true),
-                         new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => 30, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         //new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("C", new List<float> { 0, 0 }, (float v1, float v2) => .6f * v1, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true),
                          new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("C", new List<float> { 0, 0 }, (float v1, float v2) => v1*.9f, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true)
@@ -117,11 +117,64 @@ public static class Settings
                          new Module("!", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true),
                          new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
-                         new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => 45, (float v1, float v2) => v2, (float v1, float v2) => true),
-                         new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => 30, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         //new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => .6f * v1, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true),
                          new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => v1*.9f, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true)
+        } }
+    };
+
+    //    n = 10
+    //#define r1 0.9 /* contraction ratio 1 */
+    //#define r2 0.7 /* contraction ratio 2 */
+    //#define a1 10 /* branching angle 1 */
+    //#define a2 60 /* branching angle 2 */
+    //#define wr 0.707 /* width decrease rate */
+    static float r1 = .9f;
+    static float r2 = .7f;
+    static float a1 = 10f;
+    static float a2 = 60f;
+    static float wr = .707f;
+    public static List<Module> initialModuleForCircularTree
+    = new List<Module> { new Module("A", new List<float> { 1, 10 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true) };
+    //ω : A(1,10)
+    // p1 : A(l, w) : *→ !(w) F(l)[&(a1) B(l* r1, w* wr)]
+    // /(180)[&(a2) B(l* r2, w* wr)]
+    //p2 : B(l, w) : *→ !(w) F(l)[+(a1)$B(l* r1, w* wr)]
+    //[-(a2)$B(l* r2, w* wr)]
+    public static Dictionary<(string, bool), List<Module>> moduleAlphabetForCircularTree = new Dictionary<(string, bool), List<Module>>
+    {
+        {("A", true), new List<Module>{
+                         new Module("!", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true),
+                         new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("&", new List<float> { 0, 0 }, (float v1, float v2) => a1, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => r1 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
+                         new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("/", new List<float> { 0, 0 }, (float v1, float v2) => 180f, (float v1, float v2) => v2, (float v1, float v2) => true),
+
+                         new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("&", new List<float> { 0, 0 }, (float v1, float v2) => a2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => r2 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
+                         new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true)
+
+        } },
+        {("B", true), new List<Module>{
+                         new Module("!", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true),
+                         new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => a1, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         //new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => r1 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
+                         new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+
+                         new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => a2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => r2 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
+                         new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true)
+
         } }
     };
 }

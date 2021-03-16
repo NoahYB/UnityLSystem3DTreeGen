@@ -86,12 +86,13 @@ public class CreateTreeMesh : MonoBehaviour
             gs.Add(ig);
             if (p == vs.Count - 1)
             {
-                vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 200 / Vector3.Distance(initialPosition, ig.transform.position)));
+                //vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 200 / Vector3.Distance(initialPosition, ig.transform.position)));
             }
             else
             {
-                vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 300 / Vector3.Distance(initialPosition, ig.transform.position)));
+                //vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 300 / Vector3.Distance(initialPosition, ig.transform.position)));
             }
+            vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, .02f));
             Destroy(ig);
             p++;
         }

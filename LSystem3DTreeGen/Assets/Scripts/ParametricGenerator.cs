@@ -48,6 +48,7 @@ public class ParametricGenerator : MonoBehaviour
         public Vector3 position;
         public Quaternion rotation;
         public float width;
+        public Transform turtleTransform;
     }
     public struct mesh_info
     {
@@ -70,7 +71,7 @@ public class ParametricGenerator : MonoBehaviour
         starting_width = 2f;
         /*Lsystem, Initializing class and getting vectors of tree
          */
-        ParametricLSystem parametricLSystem = new ParametricLSystem(Settings.initialModuleForBendyTree, 10, Settings.moduleAlphabetForBendyTree);
+        ParametricLSystem parametricLSystem = new ParametricLSystem(Settings.initialModuleForCircularTree, 5, Settings.moduleAlphabetForCircularTree);
         SYSTEM = parametricLSystem.CalculateSystem();
 
         InterpertSystem(SYSTEM, delta, turtle_transform);
@@ -103,12 +104,13 @@ public class ParametricGenerator : MonoBehaviour
         mesh_infos.Add(info_to_add);
         float old_width = starting_width;
 
-        List<Vector3> previousTop = null;
+        Transform lastTurtleTransformWhenFOccured = turtle.transform;
+        List<Transform> turtleTransforms = new List<Transform>();
         int index = 0;
         foreach (Module module in SYSTEM)
         {
             string name = module.GetName();
-            print(name);
+            print("NAME OF ACTION = " + name);
             if (name == "F")
             {
 
@@ -129,7 +131,9 @@ public class ParametricGenerator : MonoBehaviour
 
                 old_width = starting_width;
 
+                turtleTransforms.Add(oldTurtle);
 
+                lastTurtleTransformWhenFOccured = CopyTransform(turtle.transform);
             }
             else if (name == "L")
             {
@@ -175,7 +179,9 @@ public class ParametricGenerator : MonoBehaviour
             }
             else if (name == "$")
             {
-                turtle.transform.LookAt(Vector3.forward);
+                //turtle.transform.right = Vector3.Cross(turtle.transform.right, Vector3.up) / Vector3.Cross(turtle.transform.right, Vector3.up).magnitude;
+                turtle.transform.up = Vector3.Cross(turtle.transform.right, turtle.transform.up);
+                //turtle.transform.right = Vector3.RotateTowards(turtle.transform.right, Vector3.right,7f,2f);
             }
             else if (name == "|")
             {
@@ -184,6 +190,7 @@ public class ParametricGenerator : MonoBehaviour
             //Copy turtle into the stack
             else if (name == "[")
             {
+                turtleTransforms.Add(lastTurtleTransformWhenFOccured);
                 Vector3 position_to_copy;
                 Quaternion rotation_to_copy;
                 position_to_copy = turtle.transform.position;
@@ -193,30 +200,65 @@ public class ParametricGenerator : MonoBehaviour
                 copy_info.position = position_to_copy;
                 copy_info.rotation = rotation_to_copy;
                 copy_info.width = starting_width;
+                copy_info.turtleTransform = CopyTransform(turtle.transform);
                 stack.Push(copy_info);
             }
             else if (name == "]")
             {
                 i += 1;
 
-                turtle_info new_turtle = (turtle_info)stack.Pop();
-                turtle.transform.position = new_turtle.position;
-                turtle.transform.rotation = new_turtle.rotation;
-                starting_width = new_turtle.width;
-                info_to_add.position = turtle.transform.position;
-                info_to_add.width = starting_width;
-                info_to_add.isLeaf = false;
-                info_to_add.skip = true;
-                mesh_infos.Add(info_to_add);
+                turtleTransforms.Add(lastTurtleTransformWhenFOccured);
 
+                //GameObject segment = Instantiate(tree);
+
+                //segment.transform.position = initial_position;
+
+                //CreateTreeMesh TreeCreator = new CreateTreeMesh();
+
+                //CreateTreeMesh.MeshInfo sMesh = TreeCreator.Init(turtleTransforms, initial_position);
+
+                //Mesh finalSegMesh = segment.GetComponent<MeshFilter>().mesh;
+                //finalSegMesh.vertices = sMesh.vertices;
+
+                //finalSegMesh.triangles = sMesh.triangles;
+
+                //finalSegMesh.RecalculateNormals();
+                //finalSegMesh.RecalculateBounds();
+                //segment.transform.parent = this.transform;
+                turtle_info turtleInfo = stack.Pop();
+
+                turtle.transform.position = turtleInfo.position;
+
+                turtle.transform.rotation = turtleInfo.rotation;
+
+                turtle.transform.up = turtleInfo.turtleTransform.up;
+
+                turtleTransforms.Clear();
             }
 
             i += 1;
             index += 1;
         }
-        turtle.transform.position = initial_position;
+        //turtleTransforms.Add(CopyTransform(turtle.transform));
+        //turtle.transform.position = initial_position;
+        //GameObject finalSegment = Instantiate(tree);
 
-        Mesh tree_mesh = GetComponent<MeshFilter>().mesh;
+        //finalSegment.transform.position = initial_position;
+
+        //CreateTreeMesh FinalTreeCreator = new CreateTreeMesh();
+
+        //CreateTreeMesh.MeshInfo FinalsMesh = FinalTreeCreator.Init(turtleTransforms, initial_position);
+
+        //Mesh segMesh = finalSegment.GetComponent<MeshFilter>().mesh;
+        //segMesh.vertices = FinalsMesh.vertices;
+
+        //segMesh.triangles = FinalsMesh.triangles;
+
+        //segMesh.RecalculateNormals();
+        //segMesh.RecalculateBounds();
+        //finalSegment.transform.parent = this.transform;
+        //this.transform.position = new Vector3(0, 0, 0);
+
     }
     void CombineMeshes(GameObject parent, bool fall)
     {
