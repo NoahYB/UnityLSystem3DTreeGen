@@ -1,4 +1,5 @@
-![Screenshot (72)](https://user-images.githubusercontent.com/37704804/111405751-47063800-868e-11eb-80e6-50c8c8adfccb.png)
+![Screenshot (72)](https://user-images.githubusercontent.com/37704804/111405796-5dac8f00-868e-11eb-82d5-dd5578375999.png)
+
 
 # LSystem3DTreeGen
 Program that creates 3D L Systems in Unity mainly to be used for creating trees <br />
