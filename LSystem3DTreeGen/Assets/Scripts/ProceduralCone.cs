@@ -15,11 +15,6 @@ public class ProceduralCone : MonoBehaviour
 		mesh.Clear();
 
 
-		if(height > 1)
-        {
-			height = Settings.line_length;
-		}
-
 		float bottomRadius = bR;
 		float topRadius = tR;
 		int nbSides = 20;

@@ -68,10 +68,10 @@ public class ParametricGenerator : MonoBehaviour
         leaf_size = Settings.leaf_size;
         trunk_size = Settings.trunk_size;
         width_ratio = Settings.width_ratio;
-        starting_width = 2f;
+        starting_width = .082f;
         /*Lsystem, Initializing class and getting vectors of tree
          */
-        ParametricLSystem parametricLSystem = new ParametricLSystem(Settings.initialModuleForCircularTree, 5, Settings.moduleAlphabetForCircularTree);
+        ParametricLSystem parametricLSystem = new ParametricLSystem(Settings.initialModuleForCircularTree, 10, Settings.moduleAlphabetForCircularTree);
         SYSTEM = parametricLSystem.CalculateSystem();
 
         InterpertSystem(SYSTEM, delta, turtle_transform);
@@ -123,7 +123,7 @@ public class ParametricGenerator : MonoBehaviour
 
                 turtle.transform.Rotate(axis, tropismAngle);
 
-                //CreateSegment(turtle, old_width, previousTop);
+                CreateSegment(turtle, old_width, module.parameters[0] * 3);
 
                 turtle.transform.position += (module.parameters[0] * 3) * turtle.transform.up;
 
@@ -145,11 +145,11 @@ public class ParametricGenerator : MonoBehaviour
 
                 GameObject new_point = Instantiate(leaf);
 
-                new_point.transform.localScale = new Vector3(10f, 10f, 10f);
+                new_point.transform.localScale = new Vector3(.1f, .1f, .1f);
                 new_point.transform.rotation = turtle.transform.rotation;
                 new_point.transform.up = turtle.transform.up;
-                Vector3 pos = turtle.transform.position + (line_length / 2) * turtle.transform.up;
-                new_point.transform.position = pos;
+                new_point.transform.position = turtle.transform.position;
+                new_point.transform.parent = leafParent.transform;
 
             }
             else if (name == "f")
@@ -180,7 +180,7 @@ public class ParametricGenerator : MonoBehaviour
             else if (name == "$")
             {
                 //turtle.transform.right = Vector3.Cross(turtle.transform.right, Vector3.up) / Vector3.Cross(turtle.transform.right, Vector3.up).magnitude;
-                turtle.transform.up = Vector3.Cross(turtle.transform.right, turtle.transform.up);
+                //turtle.transform.up = Vector3.Cross(turtle.transform.right, turtle.transform.up);
                 //turtle.transform.right = Vector3.RotateTowards(turtle.transform.right, Vector3.right,7f,2f);
             }
             else if (name == "|")
@@ -233,12 +233,15 @@ public class ParametricGenerator : MonoBehaviour
 
                 turtle.transform.up = turtleInfo.turtleTransform.up;
 
+                starting_width = turtleInfo.width;
+
                 turtleTransforms.Clear();
             }
 
             i += 1;
             index += 1;
         }
+        CombineMeshes(leafParent, false);
         //turtleTransforms.Add(CopyTransform(turtle.transform));
         //turtle.transform.position = initial_position;
         //GameObject finalSegment = Instantiate(tree);
@@ -271,7 +274,6 @@ public class ParametricGenerator : MonoBehaviour
             combine[i].mesh = meshFilters[i].sharedMesh;
             combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
             meshFilters[i].gameObject.SetActive(false);
-
             i++;
         }
         parent.GetComponent<MeshFilter>().mesh = new Mesh();
@@ -280,14 +282,18 @@ public class ParametricGenerator : MonoBehaviour
         {
             parent.GetComponent<Renderer>().material.color = Settings.fall_colors[UnityEngine.Random.Range(0, 3)];
         }
+        foreach (Transform child in parent.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
         parent.gameObject.SetActive(true);
     }
-    void CreateSegment(GameObject turtle, float oldWidth, List<Vector3> previousTop)
+    void CreateSegment(GameObject turtle, float oldWidth, float h)
     {
         GameObject sC = Instantiate(segmentCreator);
         sC.transform.position = turtle.transform.position;
         sC.transform.rotation = turtle.transform.rotation;
-        sC.GetComponent<ProceduralCone>().DrawCone(oldWidth, starting_width,10);
+        sC.GetComponent<ProceduralCone>().DrawCone(starting_width, starting_width, h);
     }
     Transform CopyTransform(Transform t)
     {

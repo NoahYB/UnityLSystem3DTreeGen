@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: family-tree-maple-leaf-encapsulated-postscript-watercolor-painting-autocad-dxf-texture-black-maple-woody-plant-png-clipart
+  m_Name: LeafMaterial
   m_Shader: {fileID: 4800000, guid: 9c5c1ed5632301047bdb4603ee2a3c92, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 52cc7d715bdb6af4083920cbdd4e85d7, type: 3}
+        m_Texture: {fileID: 2800000, guid: f49db9c41bf970742bdecf65932e56da, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -64,13 +64,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AnimationSpeed: 3.7
+    - _AnimationSpeed: 0.14
     - _BumpScale: 1
-    - _Clip: 0.488
+    - _Clip: 0.031
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Frequency: 7.34
+    - _Frequency: 10
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
