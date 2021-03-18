@@ -47,15 +47,15 @@ public class Module
     {
         return new List<float> { paramOneOperator(v1, v2), paramTwoOperator(v1, v2) };
     }
-    public List<Module> ReturnSuccecors()
+    public List<Module> ReturnSuccecors(Dictionary<(string, bool), List<Module>> alphabet)
     {
         List<Module> successors = new List<Module>();
         
         (string, bool) key = (name, CheckConditional(parameters[0], parameters[1]));
         
-        if (Settings.moduleAlphabetForCircularTree.ContainsKey(key))
+        if (alphabet.ContainsKey(key))
         {
-            foreach (Module succesor in Settings.moduleAlphabetForCircularTree[key])
+            foreach (Module succesor in alphabet[key])
             {
                 Module s = CopyModule(succesor);
                 s.parameters = s.UpdateSuccesorParams(parameters[0], parameters[1]);
@@ -65,7 +65,6 @@ public class Module
         else
         {
             successors.Add(CopyModule(this));
-            //Debug.Log("NAME OF NO SUC: " + this.name);
         }
             
 
@@ -82,45 +81,45 @@ public class Module
 
 
 
+//IGNORE
+    //public class Operation
+    //{
+    //    string firstParameter; string firstOperation; string firstParameterModifier;
+    //    string secondParameter; string secondOperation; string secondParameterModifier;
+    //    public Operation(string firstParameter, string firstOperation, string firstParameterModifier,
+    //                     string secondParameter, string secondOperation, string secondParameterModifier)
+    //    {
+    //        this.firstParameter = firstParameter;
+    //        this.firstOperation = firstOperation;
+    //        this.firstParameterModifier = firstParameterModifier;
+    //        this.secondParameter = secondParameter;
+    //        this.secondOperation = secondOperation;
+    //        this.secondParameterModifier = secondParameterModifier;
+    //    }
+    //    public List<float> ExecuteOperation()
+    //    {
+    //        float x = float.Parse(firstParameter, System.Globalization.CultureInfo.InvariantCulture);
+    //        float xMod = float.Parse(firstParameterModifier, System.Globalization.CultureInfo.InvariantCulture);
 
-    public class Operation
-    {
-        string firstParameter; string firstOperation; string firstParameterModifier;
-        string secondParameter; string secondOperation; string secondParameterModifier;
-        public Operation(string firstParameter, string firstOperation, string firstParameterModifier,
-                         string secondParameter, string secondOperation, string secondParameterModifier)
-        {
-            this.firstParameter = firstParameter;
-            this.firstOperation = firstOperation;
-            this.firstParameterModifier = firstParameterModifier;
-            this.secondParameter = secondParameter;
-            this.secondOperation = secondOperation;
-            this.secondParameterModifier = secondParameterModifier;
-        }
-        public List<float> ExecuteOperation()
-        {
-            float x = float.Parse(firstParameter, System.Globalization.CultureInfo.InvariantCulture);
-            float xMod = float.Parse(firstParameterModifier, System.Globalization.CultureInfo.InvariantCulture);
+    //        float y = float.Parse(secondParameter, System.Globalization.CultureInfo.InvariantCulture);
+    //        float yMod = float.Parse(secondParameterModifier, System.Globalization.CultureInfo.InvariantCulture);
 
-            float y = float.Parse(secondParameter, System.Globalization.CultureInfo.InvariantCulture);
-            float yMod = float.Parse(secondParameterModifier, System.Globalization.CultureInfo.InvariantCulture);
-
-            return new List<float> { FindOperand(firstParameterModifier,x,xMod), FindOperand(secondParameterModifier, y, yMod) };
-        }
-        public float FindOperand(string op, float v1, float v2)
-        {
-            switch (op)
-            {
-                case "+":
-                    return v1 + v2;
-                case "-":
-                    return v1 - v2;
-                case "/":
-                    return v1 / v2;
-                case "*":
-                    return v1 * v2;
-            }
-            return v1 + v2;
-        }
-    }
-    // "[0]/2" or "[1]/[0]" examples of operation on parameters
+    //        return new List<float> { FindOperand(firstParameterModifier,x,xMod), FindOperand(secondParameterModifier, y, yMod) };
+    //    }
+    //    public float FindOperand(string op, float v1, float v2)
+    //    {
+    //        switch (op)
+    //        {
+    //            case "+":
+    //                return v1 + v2;
+    //            case "-":
+    //                return v1 - v2;
+    //            case "/":
+    //                return v1 / v2;
+    //            case "*":
+    //                return v1 * v2;
+    //        }
+    //        return v1 + v2;
+    //    }
+    //}
+    //// "[0]/2" or "[1]/[0]" examples of operation on parameters

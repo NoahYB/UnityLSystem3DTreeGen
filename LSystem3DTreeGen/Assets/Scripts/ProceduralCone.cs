@@ -15,8 +15,8 @@ public class ProceduralCone : MonoBehaviour
 		mesh.Clear();
 
 
-		float bottomRadius = bR;
-		float topRadius = tR;
+		float bottomRadius = bR/100;
+		float topRadius = tR/100;
 		int nbSides = 20;
 		int nbHeightSeg = 1; // Not implemented yet
 

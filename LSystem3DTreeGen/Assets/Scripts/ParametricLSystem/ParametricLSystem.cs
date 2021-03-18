@@ -27,7 +27,7 @@ public class ParametricLSystem : MonoBehaviour
             BUILDER = new List<Module> { };
             for (int j = 0; j < SYSTEM.Count; j++)
             {
-                foreach(Module Succesor in SYSTEM[j].ReturnSuccecors())
+                foreach(Module Succesor in SYSTEM[j].ReturnSuccecors(alphabet))
                 {
                     BUILDER.Add(Succesor);
                 }
