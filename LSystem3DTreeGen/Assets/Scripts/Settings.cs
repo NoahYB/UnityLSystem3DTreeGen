@@ -16,7 +16,7 @@ public static class Settings
     public static char[] corresponding_character;
 
     public static string initial = "FAFFA";
-    public static int generations = 10;
+    public static int generations = 3;
 
     public static int animation_speed = 1;
 
