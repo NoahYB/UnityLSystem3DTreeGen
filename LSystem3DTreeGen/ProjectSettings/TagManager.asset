@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Color
   - DummyTransform
+  - Generator
   layers:
   - Default
   - TransparentFX

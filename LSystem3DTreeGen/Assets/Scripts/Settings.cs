@@ -233,9 +233,9 @@ public static class Settings
 
 
         } },
-        {("F", true), new List<Module>{
-                    new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1 * lr, (float v1, float v2) => v1, (float v1, float v2) => true)
-        } },
+        //{("F", true), new List<Module>{
+                    //new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1 * lr, (float v1, float v2) => v1, (float v1, float v2) => true)
+        //} },
         {("!", true), new List<Module>{
                          new Module("!", new List<float> { 0, 0 }, (float v1, float v2) => v1 * vr, (float v1, float v2) => v1, (float v1, float v2) => true)
         } }
