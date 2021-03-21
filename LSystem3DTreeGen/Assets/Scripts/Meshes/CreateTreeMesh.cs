@@ -16,11 +16,20 @@ public class CreateTreeMesh : MonoBehaviour
 
     private List<Vector3> vertices;
 
+    private List<Vector3> verticesList;
+    private List<int> trianglesList;
 
+    private int triangleIndex;
     public struct MeshInfo
     {
         public Vector3[] vertices;
         public int[] triangles;
+    }
+    public void Initialize()
+    {
+        verticesList = new List<Vector3>();
+        trianglesList = new List<int>();
+        transformPrefab = GameObject.FindGameObjectWithTag("DummyTransform");
     }
     public MeshInfo Init(List<Transform> turtleTransforms, Vector3 initialPosition)
     {
@@ -52,7 +61,7 @@ public class CreateTreeMesh : MonoBehaviour
                 Quaternion rot2 = turtleTransforms[i + 1].rotation;
                 Transform t = Instantiate(transformPrefab.transform, pos, rot);
                 Transform t2 = Instantiate(transformPrefab.transform, pos2, rot2);
-                vs.AddRange(GetBendedPoints(t, t2));
+                vs.AddRange(GetBendedPoints(turtleTransforms[i], turtleTransforms[i + 1]));
                 Destroy(t.gameObject);
                 Destroy(t2.gameObject);
             }
@@ -92,7 +101,7 @@ public class CreateTreeMesh : MonoBehaviour
             {
                 //vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 300 / Vector3.Distance(initialPosition, ig.transform.position)));
             }
-            vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, .02f));
+            vertices.AddRange(CreateCircleAroundPoint(ig.transform, 20, 3f));
             Destroy(ig);
             p++;
         }
@@ -105,9 +114,48 @@ public class CreateTreeMesh : MonoBehaviour
         }
         return mInfo;
     }
+    public void AddSegment(Transform t1, Transform t2, float w1, float w2)
+    {
+
+        verticesList.AddRange(CreateCircleAroundPoint(t1, 20, w1));
+        verticesList.AddRange(CreateCircleAroundPoint(t2, 20, w2));
+        trianglesList.AddRange(CreateTriangleList(verticesList));
+    }
+    public MeshInfo FinishMeshCreation()
+    {
+        MeshInfo mInfo = new MeshInfo();
+        mInfo.vertices = verticesList.ToArray();
+        mInfo.triangles = trianglesList.ToArray();
+        return mInfo;
+    }
     // Update is called once per frame
     void Update()
     {
+    }
+    List<int> CreateTriangleList(List<Vector3> vertices)
+    {
+        List<int> triangleList = new List<int>();
+        for (int i = triangleIndex; i < vertices.Count; ++i)
+        {
+            if (i < vertices.Count - 20)
+            {
+                triangleList.Add(i);
+                
+                triangleList.Add(i + 1);
+
+                triangleList.Add(i + 20);
+            }
+            else
+            {
+
+                triangleList.Add(i - 20);
+                triangleList.Add(i);
+                triangleList.Add(i - 1);
+            }
+        }
+        triangleIndex += 40;
+
+        return triangleList;
     }
     int[] CreateTriangles(Vector3[] vertices)
     {

@@ -105,12 +105,16 @@ public class StaticGenerator : MonoBehaviour
 
         float old_width = starting_width;
 
+        float oldWidth = starting_width;
+        float currentWidth = starting_width;
         List<Transform> turtleTransforms = new List<Transform>();
         List<Transform> newTurtleTransforms = new List<Transform>();
         int index = 0;
 
         Transform lastTurtleTransformWhenFOccured = turtle.transform;
 
+        CreateTreeMesh TreeCreator = new CreateTreeMesh();
+        TreeCreator.Initialize();
         foreach (char character in SYSTEM)
         {
             if (character == 'F')
@@ -125,14 +129,12 @@ public class StaticGenerator : MonoBehaviour
                 turtle.transform.Rotate(axis, tropismAngle);
 
                 turtle.transform.position += line_length * turtle.transform.up;
-
-                turtleTransforms.Add(oldTurtle);
-
+                
                 Debug.DrawLine(oldTurtle.position, turtle.transform.position, Color.red, 200);
+                TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform),oldWidth,currentWidth);
+                oldWidth = currentWidth;
 
                 old_width = starting_width;
-
-                lastTurtleTransformWhenFOccured = CopyTransform(turtle.transform);
             }
             else if (character == 'L')
             {
@@ -158,13 +160,15 @@ public class StaticGenerator : MonoBehaviour
                 turtle.transform.position += line_length * turtle.transform.up;
 
             }
-            else if (character == 'w')
+            else if (character == '!')
             {
-                starting_width *= width_ratio;
+                oldWidth = currentWidth;
+                currentWidth *= width_ratio;
             }
             else if (character == 'e')
             {
-                starting_width /= width_ratio;
+                oldWidth = currentWidth;
+                currentWidth /= width_ratio;
             }
             //Pitch down(&) and up(^) by delta
             else if (character == '&')
@@ -212,59 +216,30 @@ public class StaticGenerator : MonoBehaviour
                 turtle_info copy_info = new turtle_info();
                 copy_info.position = position_to_copy;
                 copy_info.rotation = rotation_to_copy;
-                copy_info.width = starting_width;
+                
+                copy_info.width = currentWidth;
                 stack.Push(copy_info);
             }
             else if (character == ']')
             {
                 i += 1;
 
-                turtleTransforms.Add(lastTurtleTransformWhenFOccured);
-
-                GameObject segment = Instantiate(tree);
-
-                segment.transform.position = initial_position;
-
-                CreateTreeMesh TreeCreator = new CreateTreeMesh();
-
-                CreateTreeMesh.MeshInfo sMesh = TreeCreator.Init(turtleTransforms, initial_position);
-
-                Mesh finalSegMesh = segment.GetComponent<MeshFilter>().mesh;
-                finalSegMesh.vertices = sMesh.vertices;
-
-                finalSegMesh.triangles = sMesh.triangles;
-
-                finalSegMesh.RecalculateNormals();
-                finalSegMesh.RecalculateBounds();
-                segment.transform.parent = this.transform;
-
                 turtle_info turtleInfo = stack.Pop();
-
+                Transform old = CopyTransform(turtle.transform);
                 turtle.transform.position = turtleInfo.position;
-
+                oldWidth = turtleInfo.width;
+                currentWidth = turtleInfo.width;
                 turtle.transform.rotation = turtleInfo.rotation;
-
-                turtleTransforms.Clear();
-
-                //turtleTransforms.Add(turtle.transform);
-
-
+                
             }
 
             i += 1;
             index += 1;
         }
-        turtleTransforms.Add(CopyTransform(turtle.transform));
-        turtle.transform.position = initial_position;
-        GameObject finalSegment = Instantiate(tree);
 
-        finalSegment.transform.position = initial_position;
+        CreateTreeMesh.MeshInfo FinalsMesh = TreeCreator.FinishMeshCreation();
 
-        CreateTreeMesh FinalTreeCreator = new CreateTreeMesh();
-
-        CreateTreeMesh.MeshInfo FinalsMesh = FinalTreeCreator.Init(turtleTransforms, initial_position);
-
-        Mesh segMesh = finalSegment.GetComponent<MeshFilter>().mesh;
+        Mesh segMesh = gameObject.GetComponent<MeshFilter>().mesh;
         segMesh.vertices = FinalsMesh.vertices;
 
         segMesh.triangles = FinalsMesh.triangles;
@@ -274,7 +249,7 @@ public class StaticGenerator : MonoBehaviour
 
 
 
-        CombineMeshes(gameObject, false);
+        //CombineMeshes(gameObject, false);
         CombineMeshes(leafParent, false);
 
         ExportObj(gameObject, "tree");

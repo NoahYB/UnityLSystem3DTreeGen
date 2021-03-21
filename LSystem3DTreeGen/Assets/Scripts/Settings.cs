@@ -6,10 +6,10 @@ public static class Settings
 {
     public static float width_ratio = .7f;
     public static float line_length = 40;
-    public static float delta = 45f;
+    public static float delta = 50f;
     public static float delta_range = 30f;
     public static float leaf_size = 4;
-    public static float trunk_size = .005f;
+    public static float trunk_size = .5f;
     public static float width = 5;
 
     public static string[] alphabet_rules;
@@ -118,7 +118,7 @@ public static class Settings
                          new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true),
                          new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => 45, (float v1, float v2) => v2, (float v1, float v2) => true),
-                         //new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => .6f * v1, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true),
                          new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => v1*.9f, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true)

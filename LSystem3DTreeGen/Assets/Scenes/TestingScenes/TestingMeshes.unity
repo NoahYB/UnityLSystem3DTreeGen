@@ -676,7 +676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c03033104ce9604e883bc103118020c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tropismVector: {x: 0, y: 0, z: 0}
+  tropismVector: {x: 0.3, y: 0, z: 0}
   turtle_transform: {fileID: 1092036668}
   tree: {fileID: 3327357860028573123, guid: 8a2f36bcd31e9c645a7ad5f22c2ae395, type: 3}
   leaf: {fileID: 6632465492834932745, guid: af209c1f783de7845b7bd723dc31804e, type: 3}

@@ -18,6 +18,10 @@ public class MenuForStaticGen : MonoBehaviour
         
        
     }
+    public void ExportObj()
+    {
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().ExportObj("ExportedObj");
+    }
     public void SetAlphabet(int option)
     {
         if (option == 0)
@@ -45,6 +49,6 @@ public class MenuForStaticGen : MonoBehaviour
     public void Generate()
     {
         print(generations);
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().Init(alphabet, initial, generations);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricAnimated>().Init(alphabet, initial, generations);
     }
 }

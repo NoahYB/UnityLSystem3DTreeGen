@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.IO;
 
 public class ParametricGenerator : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class ParametricGenerator : MonoBehaviour
     public GameObject turtle_transform;
     public GameObject leaf;
     public GameObject leafParent;
+    public GameObject treeForMesh;
     public GameObject trunkGroup;
     List<Transform> pointsForLine;
     public GameObject segmentCreator;
@@ -104,6 +106,8 @@ public class ParametricGenerator : MonoBehaviour
         Transform lastTurtleTransformWhenFOccured = turtle.transform;
         List<Transform> turtleTransforms = new List<Transform>();
         int index = 0;
+        CreateTreeMesh TreeCreator = new CreateTreeMesh();
+        TreeCreator.Initialize();
         foreach (Module module in SYSTEM)
         {
             string name = module.GetName();
@@ -117,20 +121,20 @@ public class ParametricGenerator : MonoBehaviour
 
 
                 turtle.transform.Rotate(axis, tropismAngle);
-                if(index == 0)
-                {
-                    CreateSegment(turtle, currentWidth, currentWidth, module.parameters[0]);
-                }
-                else
-                {
-                    CreateSegment(turtle, lastWidth, currentWidth, module.parameters[0]);
-                }
+
                 
 
                 turtle.transform.position += (module.parameters[0]) * turtle.transform.up;
 
-                //Debug.DrawLine(oldTurtle.position, turtle.transform.position, UnityEngine.Random.ColorHSV(0f, .2f, .5f, 1f, 0.5f, 7.f), 100f);
-
+                Debug.DrawLine(oldTurtle.position, turtle.transform.position, UnityEngine.Random.ColorHSV(0f, .2f, .5f, 1f, 0.5f, .7f), 100f);
+                if (index == 0)
+                {
+                    TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), currentWidth / 100, currentWidth / 100);
+                }
+                else
+                {
+                    TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), lastWidth / 100, currentWidth / 100);
+                }
                 turtleTransforms.Add(oldTurtle);
                 if(turtle.transform.position.y > maxBounds.y)
                 {
@@ -142,6 +146,7 @@ public class ParametricGenerator : MonoBehaviour
                 }
                 lastTurtleTransformWhenFOccured = CopyTransform(turtle.transform);
                 index += 1;
+                lastWidth = currentWidth;
             }
             else if (name == "L")
             {
@@ -215,7 +220,7 @@ public class ParametricGenerator : MonoBehaviour
             {
                 i += 1;
                 
-                turtleTransforms.Add(lastTurtleTransformWhenFOccured);
+                
 
                 turtle_info turtleInfo = stack.Pop();
 
@@ -226,13 +231,26 @@ public class ParametricGenerator : MonoBehaviour
                 currentWidth = turtleInfo.width;
                 lastWidth = currentWidth;
 
-                turtleTransforms.Clear();
             }
 
             i += 1;
         }
+        turtleTransforms.Add(CopyTransform(turtle.transform));
+        turtle.transform.position = initial_position;
+
+        CreateTreeMesh.MeshInfo FinalsMesh = TreeCreator.FinishMeshCreation();
+        
+        Mesh segMesh = gameObject.GetComponent<MeshFilter>().mesh;
+        segMesh.Clear();
+        segMesh.vertices = FinalsMesh.vertices;
+
+        segMesh.triangles = FinalsMesh.triangles;
+
+        segMesh.RecalculateNormals();
+        segMesh.RecalculateBounds();
+
         CombineMeshes(leafParent, false);
-        //CombineMeshes(gameObject, false);
+        
 
     }
     void CombineMeshes(GameObject parent, bool fall)
@@ -271,5 +289,19 @@ public class ParametricGenerator : MonoBehaviour
     Transform CopyTransform(Transform t)
     {
         return Instantiate(t.transform, t.transform.position, t.transform.rotation).transform;
+    }
+    public void ExportObj(string name)
+    {
+        string path = "/Users/nybri/Desktop";
+        path = Path.Combine(path, name + ".obj");
+
+        //Create Directory if it does not exist
+        if (!Directory.Exists(Path.GetDirectoryName(path)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+        }
+
+        MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
+        ObjExporter.MeshToFile(meshFilter, path);
     }
 }
