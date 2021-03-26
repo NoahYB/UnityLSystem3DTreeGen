@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3327357860028573134}
   - component: {fileID: 3327357860028573121}
   - component: {fileID: 3327357860028573120}
+  - component: {fileID: 274787723838398289}
   m_Layer: 0
   m_Name: Branch
   m_TagString: Untagged
@@ -59,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 75f0cedc8c298b6499395c2e0162b393, type: 2}
+  - {fileID: 2100000, guid: 3a9c4938d2fd1f144b8c39abb1da4f66, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,3 +94,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &274787723838398289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3327357860028573123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40fb229a1ae5c454788fc1ab175ea5a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformPrefab: {fileID: 0}
+  point: {fileID: 0}
+  sphere: {fileID: 0}

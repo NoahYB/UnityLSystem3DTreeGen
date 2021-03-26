@@ -7,6 +7,7 @@ TagManager:
   - Color
   - DummyTransform
   - Generator
+  - Sphere
   layers:
   - Default
   - TransparentFX

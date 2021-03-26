@@ -20,7 +20,7 @@ public class MenuForStaticGen : MonoBehaviour
     }
     public void ExportObj()
     {
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().ExportObj("ExportedObj");
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricAnimated>().ExportObj("ExportedObj");
     }
     public void SetAlphabet(int option)
     {
@@ -48,7 +48,13 @@ public class MenuForStaticGen : MonoBehaviour
     }
     public void Generate()
     {
-        print(generations);
         GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricAnimated>().Init(alphabet, initial, generations);
+    }
+    public void GenerateRandom()
+    {
+        CreateRandomLSystem CRLS = new CreateRandomLSystem();
+        List<Module> iRandom = CRLS.CreateRandomAxiom();
+        Dictionary<(string, bool), List<Module>> alphabetRandom = CRLS.CreateRandomAlphabet(iRandom, 3);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricAnimated>().Init(alphabetRandom, iRandom, generations);
     }
 }

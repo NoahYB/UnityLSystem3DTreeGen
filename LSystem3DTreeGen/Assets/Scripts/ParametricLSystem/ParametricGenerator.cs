@@ -19,7 +19,7 @@ public class ParametricGenerator : MonoBehaviour
     public GameObject turtle_transform;
     public GameObject leaf;
     public GameObject leafParent;
-    public GameObject treeForMesh;
+    public GameObject tree;
     public GameObject trunkGroup;
     List<Transform> pointsForLine;
     public GameObject segmentCreator;
@@ -107,7 +107,6 @@ public class ParametricGenerator : MonoBehaviour
         List<Transform> turtleTransforms = new List<Transform>();
         int index = 0;
         CreateTreeMesh TreeCreator = new CreateTreeMesh();
-        TreeCreator.Initialize();
         foreach (Module module in SYSTEM)
         {
             string name = module.GetName();
@@ -127,14 +126,7 @@ public class ParametricGenerator : MonoBehaviour
                 turtle.transform.position += (module.parameters[0]) * turtle.transform.up;
 
                 Debug.DrawLine(oldTurtle.position, turtle.transform.position, UnityEngine.Random.ColorHSV(0f, .2f, .5f, 1f, 0.5f, .7f), 100f);
-                if (index == 0)
-                {
-                    TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), currentWidth / 100, currentWidth / 100);
-                }
-                else
-                {
-                    TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), lastWidth / 100, currentWidth / 100);
-                }
+                
                 turtleTransforms.Add(oldTurtle);
                 if(turtle.transform.position.y > maxBounds.y)
                 {
@@ -219,8 +211,23 @@ public class ParametricGenerator : MonoBehaviour
             else if (name == "]")
             {
                 i += 1;
-                
-                
+
+                //GameObject segment = Instantiate(tree);
+
+                //segment.transform.position = initial_position;
+
+                //CreateTreeMesh TC = new CreateTreeMesh();
+
+                //CreateTreeMesh.MeshInfo sMesh = TC.Init(turtleTransforms, initial_position);
+
+                //Mesh finalSegMesh = segment.GetComponent<MeshFilter>().mesh;
+                //finalSegMesh.vertices = sMesh.vertices;
+
+                //finalSegMesh.triangles = sMesh.triangles;
+
+                //finalSegMesh.RecalculateNormals();
+                //finalSegMesh.RecalculateBounds();
+                //segment.transform.parent = this.transform;
 
                 turtle_info turtleInfo = stack.Pop();
 
@@ -229,25 +236,36 @@ public class ParametricGenerator : MonoBehaviour
                 turtle.transform.rotation = turtleInfo.rotation;
 
                 currentWidth = turtleInfo.width;
+
                 lastWidth = currentWidth;
+
+                turtleTransforms.Clear();
 
             }
 
             i += 1;
         }
-        turtleTransforms.Add(CopyTransform(turtle.transform));
-        turtle.transform.position = initial_position;
 
-        CreateTreeMesh.MeshInfo FinalsMesh = TreeCreator.FinishMeshCreation();
-        
-        Mesh segMesh = gameObject.GetComponent<MeshFilter>().mesh;
-        segMesh.Clear();
-        segMesh.vertices = FinalsMesh.vertices;
 
-        segMesh.triangles = FinalsMesh.triangles;
+        //turtleTransforms.Add(CopyTransform(turtle.transform));
+        //turtle.transform.position = initial_position;
+        //GameObject finalSegment = Instantiate(tree);
 
-        segMesh.RecalculateNormals();
-        segMesh.RecalculateBounds();
+        //finalSegment.transform.position = initial_position;
+
+        //CreateTreeMesh FinalTreeCreator = new CreateTreeMesh();
+
+        //CreateTreeMesh.MeshInfo FinalsMesh = FinalTreeCreator.Init(turtleTransforms, initial_position);
+
+        //Mesh segMesh = finalSegment.GetComponent<MeshFilter>().mesh;
+        //segMesh.vertices = FinalsMesh.vertices;
+
+        //segMesh.triangles = FinalsMesh.triangles;
+
+        //segMesh.RecalculateNormals();
+        //segMesh.RecalculateBounds();
+        //finalSegment.transform.parent = this.transform;
+        //this.transform.position = new Vector3(0, 0, 0);
 
         CombineMeshes(leafParent, false);
         

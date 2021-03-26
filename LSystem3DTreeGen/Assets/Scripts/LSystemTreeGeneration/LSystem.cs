@@ -33,6 +33,7 @@ public class LSystem
                 
                 if (alphabet.ContainsKey(SYSTEM[j]))
                 {
+
                     BUILDER += (alphabet[SYSTEM[j]]);
                 } 
                 else

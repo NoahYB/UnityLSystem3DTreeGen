@@ -58,6 +58,8 @@ public class ParametricAnimated : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+
+        leafParent.GetComponent<MeshFilter>().mesh.Clear();
         turtle_transform.transform.position = new Vector3(0, 0, 0);
         turtle_transform.transform.rotation = Quaternion.identity;
         pointsForLine = new List<Transform>();
@@ -96,6 +98,7 @@ public class ParametricAnimated : MonoBehaviour
         if (finish)
         {
             transform.Rotate(Vector3.up * .2f);
+            leafParent.transform.rotation = transform.rotation;//(Vector3.up * .2f);
         }
     }
     // Update is called once per frame
@@ -113,11 +116,16 @@ public class ParametricAnimated : MonoBehaviour
         info_to_add.isLeaf = false;
         mesh_infos.Add(info_to_add);
         //Default width if none will be provided
-        float lastWidth = 1f;
-        float currentWidth = 1f;
+        float lastWidth = 3f;
+        float currentWidth = 3f;
+        
         int index = 0;
         CreateTreeMesh TreeCreator = new CreateTreeMesh();
         TreeCreator.Initialize();
+        Quaternion rotationHolder = Quaternion.identity;
+        List<Transform> allTransformsPresent = new List<Transform>();
+        allTransformsPresent.Add(CopyTransform(turtle.transform));
+
         for(int id = 0; id < SYSTEM.Count; id++)
         {
             Module module = SYSTEM[id];
@@ -126,6 +134,7 @@ public class ParametricAnimated : MonoBehaviour
             {
 
                 Transform oldTurtle = CopyTransform(turtle.transform);
+
                 Vector3 axis = Vector3.Cross(turtle.transform.up.normalized, tropismVector);
 
                 float tropismAngle = Mathf.Rad2Deg * .27f * axis.magnitude;
@@ -134,18 +143,20 @@ public class ParametricAnimated : MonoBehaviour
                 turtle.transform.Rotate(axis, tropismAngle);
 
 
-
                 turtle.transform.position += (module.parameters[0]) * turtle.transform.up;
-
-                Debug.DrawLine(oldTurtle.position, turtle.transform.position, UnityEngine.Random.ColorHSV(0f, .2f, .5f, 1f, 0.5f, .7f), 100f);
                 if (index == 0)
                 {
                     TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), currentWidth / 100, currentWidth / 100);
+                    
                 }
                 else
                 {
                     TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), lastWidth / 100, currentWidth / 100);
+                    
                 }
+
+                allTransformsPresent.Add(CopyTransform(turtle.transform));
+
                 CreateTreeMesh.MeshInfo MidMesh = TreeCreator.FinishMeshCreation();
 
                 Mesh SegmentMesh = gameObject.GetComponent<MeshFilter>().mesh;
@@ -157,7 +168,7 @@ public class ParametricAnimated : MonoBehaviour
                 SegmentMesh.RecalculateNormals();
                 SegmentMesh.RecalculateBounds();
 
-                yield return new WaitForSeconds(.004f);
+                yield return new WaitForSeconds(.00004f);
 
                 if (turtle.transform.position.y > maxBounds.y)
                 {
@@ -211,7 +222,7 @@ public class ParametricAnimated : MonoBehaviour
             else if (name == "!")
             {
                 lastWidth = currentWidth;
-                currentWidth = Mathf.Max(module.parameters[0], .001f);
+                currentWidth = module.parameters[0];
             }
             //Pitch down(&) and up(^) by delta
             else if (name == "&")
@@ -257,14 +268,20 @@ public class ParametricAnimated : MonoBehaviour
             else if (name == "]")
             {
                 i += 1;
-
-
-
+                
+                
+                
                 turtle_info turtleInfo = stack.Pop();
 
                 turtle.transform.position = turtleInfo.position;
 
                 turtle.transform.rotation = turtleInfo.rotation;
+
+                rotationHolder = turtleInfo.rotation;
+
+                TreeCreator.SetLastTranfsorm(CopyTransform(turtle.transform));
+
+                TreeCreator.ResetTriangle(turtle.transform.position);
 
                 currentWidth = turtleInfo.width;
                 lastWidth = currentWidth;
@@ -319,9 +336,10 @@ public class ParametricAnimated : MonoBehaviour
     void CreateSegment(GameObject turtle, float oldWidth, float newWidth, float h)
     {
         GameObject sC = Instantiate(segmentCreator);
+        
         sC.transform.position = turtle.transform.position;
         sC.transform.rotation = turtle.transform.rotation;
-        sC.transform.parent = this.transform;
+        //sC.transform.parent = this.transform;
         sC.GetComponent<ProceduralCone>().DrawCone(oldWidth, newWidth, h);
     }
     Transform CopyTransform(Transform t)
@@ -338,8 +356,32 @@ public class ParametricAnimated : MonoBehaviour
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path));
         }
-
+        print("here");
         MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
         ObjExporter.MeshToFile(meshFilter, path);
+
+        string path2 = "/Users/nybri/Desktop";
+        path2 = Path.Combine(path2, "leafgenerated.obj");
+
+        //Create Directory if it does not exist
+        if (!Directory.Exists(Path.GetDirectoryName(path2)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path2));
+        }
+        
+        MeshFilter meshFilterLeaf = leafParent.GetComponent<MeshFilter>();
+        ObjExporter.MeshToFile(meshFilterLeaf, path2);
+        print("here");
+
+    }
+    public Vector3 GetBezierPosition(float t, Transform tOne, Transform tTwo)
+    {
+        Vector3 p0 = tOne.position;
+        Vector3 p1 = p0 + tOne.up;
+        Vector3 p3 = tTwo.position;
+        Vector3 p2 = p3 - tTwo.up;
+
+        // here is where the magic happens!
+        return Mathf.Pow(1f - t, 3f) * p0 + 3f * Mathf.Pow(1f - t, 2f) * t * p1 + 3f * (1f - t) * Mathf.Pow(t, 2f) * p2 + Mathf.Pow(t, 3f) * p3;
     }
 }

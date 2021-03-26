@@ -33,7 +33,7 @@ public static class Settings
     };
     public static Dictionary<char, string> alphabetNonParametric2 = new Dictionary<char, string>
     {
-        {'A',  "[&FL!A]/////’[&FL!A]///////’[&FL!A]//////’[&FL!A]" },
+        { 'A', "[&FL!A]/////’[&FL!A]///////’[&FL!A]//////’[&FL!A]" },
         { 'F', "S ///// F" },
         { 'S', "F" },
         { 'L', "[’’’^^-f+f+f-|-f+f+f]" }
@@ -120,6 +120,7 @@ public static class Settings
                          new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => 45, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => .6f * v1, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true),
+                         new Module("L", new List<float> { 0, 0 }, (float v1, float v2) => r2 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
                          new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => v1*.9f, (float v1, float v2) => v2 * .707f, (float v1, float v2) => true)
         } }
@@ -173,7 +174,7 @@ public static class Settings
                          new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => a2, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("$", new List<float> { 0, 0 }, (float v1, float v2) => 30, (float v1, float v2) => v2, (float v1, float v2) => true),
                          new Module("B", new List<float> { 0, 0 }, (float v1, float v2) => r2 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
-                         //new Module("L", new List<float> { 0, 0 }, (float v1, float v2) => r2 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
+                         new Module("L", new List<float> { 0, 0 }, (float v1, float v2) => r2 * v1, (float v1, float v2) => v2 * wr, (float v1, float v2) => true),
                          new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true)
 
         } }
