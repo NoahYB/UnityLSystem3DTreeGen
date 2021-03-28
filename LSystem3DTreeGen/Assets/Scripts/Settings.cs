@@ -263,4 +263,19 @@ public static class Settings
                          new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true)
         } }
     };
+
+    public static List<Module> initialModuleForSpaceFillingLine2
+= new List<Module> {
+         new Module("A", new List<float> { 1, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v2, (float v1, float v2) => true)
+};
+    public static Dictionary<(string, bool), List<Module>> moduleAlphabetForSpaceFillingLine2 = new Dictionary<(string, bool), List<Module>>
+    {
+        {("A", true), new List<Module>{
+                         new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true),
+                         new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("+", new List<float> { 0, 0 }, (float v1, float v2) => d, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("A", new List<float> { 0, 0 }, (float v1, float v2) => v1/1.456f, (float v1, float v2) => v2, (float v1, float v2) => true),
+                         new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true),
+        } }
+    };
 }

@@ -97,7 +97,7 @@ public class ParametricAnimated : MonoBehaviour
     {
         if (finish)
         {
-            transform.Rotate(Vector3.up * .2f);
+            //transform.Rotate(Vector3.up * .2f);
             leafParent.transform.rotation = transform.rotation;//(Vector3.up * .2f);
         }
     }
@@ -151,8 +151,7 @@ public class ParametricAnimated : MonoBehaviour
                 }
                 else
                 {
-                    TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), lastWidth / 100, currentWidth / 100);
-                    
+                    TreeCreator.AddSegment(oldTurtle, CopyTransform(turtle.transform), lastWidth / 100, currentWidth / 100);     
                 }
 
                 allTransformsPresent.Add(CopyTransform(turtle.transform));
@@ -168,7 +167,7 @@ public class ParametricAnimated : MonoBehaviour
                 SegmentMesh.RecalculateNormals();
                 SegmentMesh.RecalculateBounds();
 
-                yield return new WaitForSeconds(.00004f);
+                yield return new WaitForSeconds(.0000004f);
 
                 if (turtle.transform.position.y > maxBounds.y)
                 {
@@ -286,6 +285,7 @@ public class ParametricAnimated : MonoBehaviour
                 currentWidth = turtleInfo.width;
                 lastWidth = currentWidth;
 
+                
             }
 
             i += 1;

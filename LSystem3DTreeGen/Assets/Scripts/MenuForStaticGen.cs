@@ -32,8 +32,8 @@ public class MenuForStaticGen : MonoBehaviour
         }
         if (option == 1)
         {
-            alphabet = Settings.moduleAlphabetForSpaceFillingLine;
-            initial = Settings.initialModuleForSpaceFillingLine;
+            alphabet = Settings.moduleAlphabetForSpaceFillingLine2;
+            initial = Settings.initialModuleForSpaceFillingLine2;
         }
         if (option == 2)
         {
@@ -55,6 +55,6 @@ public class MenuForStaticGen : MonoBehaviour
         CreateRandomLSystem CRLS = new CreateRandomLSystem();
         List<Module> iRandom = CRLS.CreateRandomAxiom();
         Dictionary<(string, bool), List<Module>> alphabetRandom = CRLS.CreateRandomAlphabet(iRandom, 3);
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricAnimated>().Init(alphabetRandom, iRandom, generations);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().Init(alphabetRandom, iRandom, generations);
     }
 }

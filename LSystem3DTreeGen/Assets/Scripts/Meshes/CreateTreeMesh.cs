@@ -29,6 +29,8 @@ public class CreateTreeMesh : MonoBehaviour
     bool connectorAdd = true;
 
     Dictionary<Vector3, int[]> triangleTransform;
+
+    public int nbPoints = 20;
     public struct MeshInfo
     {
         public Vector3[] vertices;
@@ -52,7 +54,7 @@ public class CreateTreeMesh : MonoBehaviour
 
         if (connectorAdd == true)
         {
-            trianglesList.AddRange(AddConnector(lastTransformTriangles));
+            //trianglesList.AddRange(AddConnector(lastTransformTriangles));
             counter += 2;
         }
 
@@ -60,19 +62,20 @@ public class CreateTreeMesh : MonoBehaviour
         else
             connectorAdd = true;
 
-        List<Vector3> vListOne = (CreateCircleAroundPoint(t1, 20, w1));
-        List<Vector3> vListTwo = (CreateCircleAroundPoint(t2, 20, w2));
+        List<Vector3> vListOne = (CreateCircleAroundPoint(t1, nbPoints, w1));
+        List<Vector3> vListTwo = (CreateCircleAroundPoint(t2, nbPoints, w2));
         lastTransformTriangles = new int[vListTwo.Count];
         for (int i = 0; i < vListTwo.Count; i++)
             {
-                lastTransformTriangles[i] = i + 20 + verticesList.Count; // * counter;//number of sides;   
+                lastTransformTriangles[i] = i + nbPoints + verticesList.Count; // * counter;//number of sides;   
             }
-
+        
 
         verticesList.AddRange(vListOne);
         verticesList.AddRange(vListTwo);
         lastTransform = CopyTransform(t2);
         trianglesList.AddRange(CreateTriangleList(verticesList));
+        print(verticesList.Count);
         
     }
     public List<int> AddConnector(int[] lastTriangles)
@@ -127,23 +130,23 @@ public class CreateTreeMesh : MonoBehaviour
         List<int> triangleList = new List<int>();
         for (int i = triangleIndex; i < vertices.Count ; ++i)
         {
-            if (i < vertices.Count - 20)
+            if (i < vertices.Count - nbPoints)
             {
                 triangleList.Add(i);
 
                 triangleList.Add(i + 1);
 
-                triangleList.Add(i + 20);
+                triangleList.Add(i + nbPoints);
             }
             else
             {
 
-                triangleList.Add(i - 20);
+                triangleList.Add(i - nbPoints);
                 triangleList.Add(i);
                 triangleList.Add(i - 1);
             }
         }
-        triangleIndex += 40;
+        triangleIndex += nbPoints * 2;
 
         return triangleList;
     }

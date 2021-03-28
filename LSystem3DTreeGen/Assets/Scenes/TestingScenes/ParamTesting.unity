@@ -388,20 +388,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d639592cfdf39874eb32398925740214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tropismVector: {x: 0.03, y: -1, z: 0}
+  tropismVector: {x: 0, y: 0, z: 0}
   turtle_transform: {fileID: 704319980}
-  tree: {fileID: 768768898}
   leaf: {fileID: 6632465492834932745, guid: af209c1f783de7845b7bd723dc31804e, type: 3}
-  treeParent: {fileID: 0}
   leafParent: {fileID: 1851167101}
+  tree: {fileID: 768768898}
   trunkGroup: {fileID: 0}
   segmentCreator: {fileID: 7030846082571515111, guid: 9f2297b2a166f3d46828984e512efa03,
     type: 3}
-  array_rules: []
-  corresponding_character: 
-  initial: 
-  generations: 0
-  animation_speed: 0
 --- !u!33 &1509721208
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -91,7 +91,7 @@ public class CreateRandomLSystem
             Module F = new Module("F", new List<float> { 0, 0 }, (float v1, float v2) => v1, (float v1, float v2) => v1, (float v1, float v2) => true);
             Module Push = new Module("[", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true);
             Module Pop = new Module("]", new List<float> { 0, 0 }, (float v1, float v2) => v2, (float v1, float v2) => v2, (float v1, float v2) => true);
-            Module A = new Module(nonActionableCharacter, new List<float> { 0, 0 }, (float v1, float v2) => v1 * FDecrease, (float v1, float v2) => v2 * Random.Range(.9f,.8f),
+            Module A = new Module(nonActionableCharacter, new List<float> { 0, 0 }, (float v1, float v2) => v1 * FDecrease, (float v1, float v2) => v2 * Random.Range(.6f,.8f),
                                 (float v1, float v2) => true);
             
             float v1Modifier = Random.Range(0.0f, 2.0f);

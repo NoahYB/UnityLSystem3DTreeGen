@@ -24,12 +24,15 @@ public class ParametricGenerator : MonoBehaviour
     List<Transform> pointsForLine;
     public GameObject segmentCreator;
     List<Module> SYSTEM;
-    Vector3 maxBounds;
     // possible mesh building
     List<mesh_info> mesh_infos = new List<mesh_info>();
 
     float starting_width;
 
+    Vector3 minBounds;
+    Vector3 maxBounds;
+
+    bool finish = false;
     class turtle_info
     {
         public Vector3 position;
@@ -47,7 +50,9 @@ public class ParametricGenerator : MonoBehaviour
     }
     public void Init(Dictionary<(string, bool), List<Module>> alphabet, List<Module> initial, int generations)
     {
+        finish = false;
         maxBounds = Vector3.zero;
+        minBounds = Vector3.zero;
         foreach (Transform child in gameObject.transform)
         {
             Destroy(child.gameObject);
@@ -82,8 +87,13 @@ public class ParametricGenerator : MonoBehaviour
         Camera.main.transform.position = center - distance * Camera.main.transform.forward;
        
     }
-    void Start()
+    void Update()
     {
+        if (finish)
+        {
+            transform.Rotate(Vector3.up * .2f);
+            leafParent.transform.rotation = transform.rotation;//(Vector3.up * .2f);
+        }
     }
 
     // Update is called once per frame
@@ -107,6 +117,9 @@ public class ParametricGenerator : MonoBehaviour
         List<Transform> turtleTransforms = new List<Transform>();
         int index = 0;
         CreateTreeMesh TreeCreator = new CreateTreeMesh();
+
+        List<float> widths = new List<float>();
+        
         foreach (Module module in SYSTEM)
         {
             string name = module.GetName();
@@ -126,17 +139,23 @@ public class ParametricGenerator : MonoBehaviour
                 turtle.transform.position += (module.parameters[0]) * turtle.transform.up;
 
                 Debug.DrawLine(oldTurtle.position, turtle.transform.position, UnityEngine.Random.ColorHSV(0f, .2f, .5f, 1f, 0.5f, .7f), 100f);
-                
-                turtleTransforms.Add(oldTurtle);
-                if(turtle.transform.position.y > maxBounds.y)
+                if(index == 0)
                 {
-                    maxBounds.y = turtle.transform.position.y;
+                    turtleTransforms.Add(oldTurtle);
+                    widths.Add(currentWidth);
                 }
-                if (turtle.transform.position.x > maxBounds.x)
+                else
                 {
-                    maxBounds.x = turtle.transform.position.x;
+                    turtleTransforms.Add(oldTurtle);
+                    widths.Add(lastWidth);
                 }
+                UpdateBounds(turtle);
                 lastTurtleTransformWhenFOccured = CopyTransform(turtle.transform);
+
+                
+                turtleTransforms.Add(lastTurtleTransformWhenFOccured);
+                widths.Add(currentWidth);
+
                 index += 1;
                 lastWidth = currentWidth;
             }
@@ -164,7 +183,8 @@ public class ParametricGenerator : MonoBehaviour
             else if (name == "!")
             {
                 lastWidth = currentWidth;
-                currentWidth = Mathf.Max(module.parameters[0],.001f);
+                currentWidth = module.parameters[0];
+
             }
             //Pitch down(&) and up(^) by delta
             else if (name == "&")
@@ -194,7 +214,7 @@ public class ParametricGenerator : MonoBehaviour
             //Copy turtle into the stack
             else if (name == "[")
             {
-                turtleTransforms.Add(lastTurtleTransformWhenFOccured);
+                
                 Vector3 position_to_copy;
                 Quaternion rotation_to_copy;
                 position_to_copy = turtle.transform.position;
@@ -212,22 +232,22 @@ public class ParametricGenerator : MonoBehaviour
             {
                 i += 1;
 
-                //GameObject segment = Instantiate(tree);
+                GameObject segment = Instantiate(tree);
 
-                //segment.transform.position = initial_position;
+                segment.transform.position = initial_position;
 
-                //CreateTreeMesh TC = new CreateTreeMesh();
+                TreeMesh TC = new TreeMesh();
 
-                //CreateTreeMesh.MeshInfo sMesh = TC.Init(turtleTransforms, initial_position);
+                TreeMesh.MeshInfo sMesh = TC.Init(turtleTransforms, initial_position, widths);
 
-                //Mesh finalSegMesh = segment.GetComponent<MeshFilter>().mesh;
-                //finalSegMesh.vertices = sMesh.vertices;
+                Mesh finalSegMesh = segment.GetComponent<MeshFilter>().mesh;
+                finalSegMesh.vertices = sMesh.vertices;
 
-                //finalSegMesh.triangles = sMesh.triangles;
+                finalSegMesh.triangles = sMesh.triangles;
 
-                //finalSegMesh.RecalculateNormals();
-                //finalSegMesh.RecalculateBounds();
-                //segment.transform.parent = this.transform;
+                finalSegMesh.RecalculateNormals();
+                finalSegMesh.RecalculateBounds();
+                segment.transform.parent = gameObject.transform;
 
                 turtle_info turtleInfo = stack.Pop();
 
@@ -240,6 +260,7 @@ public class ParametricGenerator : MonoBehaviour
                 lastWidth = currentWidth;
 
                 turtleTransforms.Clear();
+                widths.Clear();
 
             }
 
@@ -248,53 +269,100 @@ public class ParametricGenerator : MonoBehaviour
 
 
         //turtleTransforms.Add(CopyTransform(turtle.transform));
-        //turtle.transform.position = initial_position;
-        //GameObject finalSegment = Instantiate(tree);
+        widths.Add(currentWidth);
+        turtle.transform.position = initial_position;
+        GameObject finalSegment = Instantiate(tree);
 
-        //finalSegment.transform.position = initial_position;
+        finalSegment.transform.position = initial_position;
 
-        //CreateTreeMesh FinalTreeCreator = new CreateTreeMesh();
+        TreeMesh FinalTreeCreator = new TreeMesh();
 
-        //CreateTreeMesh.MeshInfo FinalsMesh = FinalTreeCreator.Init(turtleTransforms, initial_position);
+        TreeMesh.MeshInfo FinalsMesh = FinalTreeCreator.Init(turtleTransforms, initial_position,widths);
 
-        //Mesh segMesh = finalSegment.GetComponent<MeshFilter>().mesh;
-        //segMesh.vertices = FinalsMesh.vertices;
+        Mesh segMesh = finalSegment.GetComponent<MeshFilter>().mesh;
+        segMesh.vertices = FinalsMesh.vertices;
 
-        //segMesh.triangles = FinalsMesh.triangles;
+        segMesh.triangles = FinalsMesh.triangles;
 
-        //segMesh.RecalculateNormals();
-        //segMesh.RecalculateBounds();
-        //finalSegment.transform.parent = this.transform;
-        //this.transform.position = new Vector3(0, 0, 0);
-
-        CombineMeshes(leafParent, false);
-        
+        segMesh.RecalculateNormals();
+        segMesh.RecalculateBounds();
+        finalSegment.transform.parent = gameObject.transform;
+        this.transform.position = new Vector3(0, 0, 0);
+        UpdateCamera();
+        CombineMeshes(gameObject);
+        CombineMeshes(leafParent);
+        finish = true;
 
     }
-    void CombineMeshes(GameObject parent, bool fall)
+    
+    void UpdateCamera()
     {
+        //MODIFIED FROM THIS ANSWER https://forum.unity.com/threads/fit-object-exactly-into-perspective-cameras-field-of-view-focus-the-object.496472/
+        float cameraDistance = 1.0f; // Constant factor
+        Vector3 objectSizes = maxBounds - minBounds;
+        float objectSize = Mathf.Max(objectSizes.x, objectSizes.y, objectSizes.z);
+        float cameraView = 2.0f * Mathf.Tan(0.5f * Mathf.Deg2Rad * Camera.main.fieldOfView); // Visible height 1 meter in front
+        float distance = cameraDistance * objectSize / cameraView; // Combined wanted distance from the object
+        distance += 0.5f * objectSize; // Estimated offset from the center to the outside of the object
+        Vector3 center = new Vector3(maxBounds[0] / 2, maxBounds[1] / 2, maxBounds[2]);
+        Camera.main.transform.position = center - distance * Camera.main.transform.forward;
+
+        
+    }
+    void UpdateBounds(GameObject turtle)
+    {
+        if (turtle.transform.position.y > maxBounds.y)
+        {
+            maxBounds.y = turtle.transform.position.y;
+        }
+        if (turtle.transform.position.x > maxBounds.x)
+        {
+            maxBounds.x = turtle.transform.position.x;
+        }
+        if (turtle.transform.position.y < minBounds.y)
+        {
+            minBounds.y = turtle.transform.position.y;
+        }
+        if (turtle.transform.position.x < minBounds.x)
+        {
+            minBounds.x = turtle.transform.position.x;
+        }
+    }
+    void CombineMeshes(GameObject parent)
+    {
+        parent.GetComponent<MeshFilter>().mesh.Clear();
         MeshFilter[] meshFilters = parent.GetComponentsInChildren<MeshFilter>();
         CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        int totalVertices = 0;
+        foreach(MeshFilter m in meshFilters)
+        {
+            totalVertices += m.mesh.vertices.Length; ///////O(1)???//. so ok
+        }
+        if(totalVertices > 60000)
+        {
+            return;
+        }
+        else
+        {
+            int i = 0;
+            while (i < meshFilters.Length)
+            {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+                meshFilters[i].gameObject.SetActive(false);
+                i++;
+            }
 
-        int i = 0;
-        while (i < meshFilters.Length)
-        {
-            combine[i].mesh = meshFilters[i].sharedMesh;
-            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            meshFilters[i].gameObject.SetActive(false);
-            i++;
+
+            parent.GetComponent<MeshFilter>().mesh = new Mesh();
+            parent.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
+            foreach (Transform child in parent.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+            parent.gameObject.SetActive(true);
         }
-        parent.GetComponent<MeshFilter>().mesh = new Mesh();
-        parent.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-        if (fall)
-        {
-            parent.GetComponent<Renderer>().material.color = Settings.fall_colors[UnityEngine.Random.Range(0, 3)];
-        }
-        foreach (Transform child in parent.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
-        parent.gameObject.SetActive(true);
+
     }
     void CreateSegment(GameObject turtle, float oldWidth, float newWidth, float h)
     {
