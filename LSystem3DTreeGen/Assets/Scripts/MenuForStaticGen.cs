@@ -7,10 +7,14 @@ public class MenuForStaticGen : MonoBehaviour
     Dictionary<(string, bool), List<Module>> alphabet;
     List<Module> initial;
     int generations;
+
+    List<Module> initialRand;
+    Dictionary<(string, bool), List<Module>> alphabetRand;
+    CreateRandomLSystem CRLS;
     // Start is called before the first frame update
     void Start()
     {
-        
+        CRLS = new CreateRandomLSystem();
     }
     public void SetGenerations(string gens)
     {
@@ -48,13 +52,17 @@ public class MenuForStaticGen : MonoBehaviour
     }
     public void Generate()
     {
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricAnimated>().Init(alphabet, initial, generations);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().Init(alphabet, initial, generations);
     }
     public void GenerateRandom()
     {
-        CreateRandomLSystem CRLS = new CreateRandomLSystem();
-        List<Module> iRandom = CRLS.CreateRandomAxiom();
-        Dictionary<(string, bool), List<Module>> alphabetRandom = CRLS.CreateRandomAlphabet(iRandom, 3);
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().Init(alphabetRandom, iRandom, generations);
+        initialRand = CRLS.CreateRandomAxiom();
+        alphabetRand = CRLS.CreateRandomAlphabet();
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().Init(alphabetRand, initialRand, generations);
+    }
+
+    public void RegenerateRandom()
+    {
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<ParametricGenerator>().Init(alphabetRand, initialRand, generations);
     }
 }

@@ -40,6 +40,7 @@ public class ParametricGenerator : MonoBehaviour
         public float width;
         public Transform turtleTransform;
         public float oldWidth;
+        public int level;
     }
     public struct mesh_info
     {
@@ -54,6 +55,10 @@ public class ParametricGenerator : MonoBehaviour
         maxBounds = Vector3.zero;
         minBounds = Vector3.zero;
         foreach (Transform child in gameObject.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in leafParent.transform)
         {
             Destroy(child.gameObject);
         }
@@ -91,7 +96,7 @@ public class ParametricGenerator : MonoBehaviour
     {
         if (finish)
         {
-            transform.Rotate(Vector3.up * .2f);
+            //transform.Rotate(Vector3.up * .02f);
             leafParent.transform.rotation = transform.rotation;//(Vector3.up * .2f);
         }
     }
@@ -105,16 +110,18 @@ public class ParametricGenerator : MonoBehaviour
         Vector3 initial_position = turtle.transform.position;
        
         int i = 0;
+        int level = 0;
         mesh_info info_to_add = new mesh_info();
         info_to_add.position = turtle.transform.position;
         info_to_add.width = starting_width;
         info_to_add.isLeaf = false;
         mesh_infos.Add(info_to_add);
         //Default width if none will be provided
-        float lastWidth = 1f;
-        float currentWidth = 1f;
+        float lastWidth = 20f;
+        float currentWidth = 20f;
         Transform lastTurtleTransformWhenFOccured = turtle.transform;
         List<Transform> turtleTransforms = new List<Transform>();
+        List<Transform> allTransformsGarbage = new List<Transform>();
         int index = 0;
         CreateTreeMesh TreeCreator = new CreateTreeMesh();
 
@@ -127,6 +134,7 @@ public class ParametricGenerator : MonoBehaviour
             {
 
                 Transform oldTurtle = CopyTransform(turtle.transform);
+                allTransformsGarbage.Add(oldTurtle);
                 Vector3 axis = Vector3.Cross(turtle.transform.up.normalized, tropismVector);
 
                 float tropismAngle = Mathf.Rad2Deg * .27f * axis.magnitude;
@@ -142,7 +150,12 @@ public class ParametricGenerator : MonoBehaviour
                 if(index == 0)
                 {
                     turtleTransforms.Add(oldTurtle);
-                    widths.Add(currentWidth);
+                    widths.Add(currentWidth * 1.3f);
+                }
+                else if(level == 0)
+                {
+                    turtleTransforms.Add(oldTurtle);
+                    widths.Add(lastWidth * 1.3f);
                 }
                 else
                 {
@@ -151,10 +164,19 @@ public class ParametricGenerator : MonoBehaviour
                 }
                 UpdateBounds(turtle);
                 lastTurtleTransformWhenFOccured = CopyTransform(turtle.transform);
+                allTransformsGarbage.Add(lastTurtleTransformWhenFOccured);
 
-                
-                turtleTransforms.Add(lastTurtleTransformWhenFOccured);
-                widths.Add(currentWidth);
+                if(level == 0)
+                {
+                    turtleTransforms.Add(lastTurtleTransformWhenFOccured);
+                    widths.Add(currentWidth * 1.3f);
+                }
+                else
+                {
+                    turtleTransforms.Add(lastTurtleTransformWhenFOccured);
+                    widths.Add(currentWidth);
+                }
+
 
                 index += 1;
                 lastWidth = currentWidth;
@@ -226,6 +248,9 @@ public class ParametricGenerator : MonoBehaviour
                 copy_info.width = currentWidth;
                 copy_info.oldWidth = lastWidth;
                 copy_info.turtleTransform = CopyTransform(turtle.transform);
+                copy_info.level = level;
+                level += 1;
+                allTransformsGarbage.Add(copy_info.turtleTransform);
                 stack.Push(copy_info);
             }
             else if (name == "]")
@@ -255,11 +280,16 @@ public class ParametricGenerator : MonoBehaviour
 
                 turtle.transform.rotation = turtleInfo.rotation;
 
+                level = turtleInfo.level;
+                Transform t  = CopyTransform(turtle.transform);
+                allTransformsGarbage.Add(t);
+                turtleTransforms.Add(t);
                 currentWidth = turtleInfo.width;
 
                 lastWidth = currentWidth;
 
                 turtleTransforms.Clear();
+
                 widths.Clear();
 
             }
@@ -291,10 +321,17 @@ public class ParametricGenerator : MonoBehaviour
         UpdateCamera();
         CombineMeshes(gameObject);
         CombineMeshes(leafParent);
+        DestroyTurtles(allTransformsGarbage);
         finish = true;
 
     }
-    
+    void DestroyTurtles(List<Transform> turtles)
+    {
+        foreach(Transform t in turtles)
+        {
+            Destroy(t.gameObject);
+        }
+    }
     void UpdateCamera()
     {
         //MODIFIED FROM THIS ANSWER https://forum.unity.com/threads/fit-object-exactly-into-perspective-cameras-field-of-view-focus-the-object.496472/

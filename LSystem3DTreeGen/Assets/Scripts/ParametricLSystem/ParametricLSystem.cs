@@ -30,6 +30,10 @@ public class ParametricLSystem : MonoBehaviour
                 foreach(Module Succesor in SYSTEM[j].ReturnSuccecors(alphabet))
                 {
                     BUILDER.Add(Succesor);
+                    if(Succesor.GetName() == "F" && Succesor.parameters[1] <= 6)
+                    {
+                        BUILDER.Add(new Module("L", new List<float> { 0, 0 }, (float v1, float v2) => v1 / 1.456f, (float v1, float v2) => v2, (float v1, float v2) => true));  
+                    }
                 }
             }
             SYSTEM = BUILDER;

@@ -16,7 +16,7 @@ public class TreeMesh : MonoBehaviour
 
     private List<Vector3> vertices;
 
-    public int nbSides = 5;
+    public int nbSides = 6;
     public struct MeshInfo
     {
         public Vector3[] vertices;
@@ -194,6 +194,7 @@ public class TreeMesh : MonoBehaviour
         Vector3 pPos = A0 + (A1 * tStep) + (A2 * tStep * tStep) + (A3 * tStep * tStep * tStep);
         trans.position = pPos;
         vList.Add((pPos, trans));
+        Destroy(trans);
         //for (int t = 0; t < interpolationFactor - 1; t++)
         //{
 
