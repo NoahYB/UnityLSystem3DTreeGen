@@ -1,10 +1,7 @@
-![Screenshot (96)](https://user-images.githubusercontent.com/37704804/112577533-b3c9b280-8db1-11eb-973d-a31f6210302a.png)
-
-![Screenshot (85)](https://user-images.githubusercontent.com/37704804/111701428-104c3100-87f8-11eb-8788-288e8e4a6212.png)
-
-![Screenshot (72)](https://user-images.githubusercontent.com/37704804/111405796-5dac8f00-868e-11eb-82d5-dd5578375999.png)
 
 # LSystem3DTreeGen
+![Screenshot (96)](https://user-images.githubusercontent.com/37704804/112577533-b3c9b280-8db1-11eb-973d-a31f6210302a.png)
+ind-depth explanation and write up available here https://noahbrinton.com/LSystemWriteUp/
 Program that creates 3D L Systems in Unity mainly to be used for creating trees <br />
 Compatible with both parametric and non-parametric L Systems, and Tropisms <br />
 Creates Custom meshes for L Systems and provides Cartoon-shaders for both leaves and trees <br />
@@ -25,6 +22,10 @@ examples shown below <br />
 ![Screenshot (230)](https://user-images.githubusercontent.com/37704804/113341290-d98b1600-92e1-11eb-9d2a-6b73f90caf65.png)
 ![Screenshot (225)](https://user-images.githubusercontent.com/37704804/113341313-dee86080-92e1-11eb-94cf-74707d316be6.png)
 ## Examples of Predetermined L-System Branching Structuress<br />
+
+![Screenshot (85)](https://user-images.githubusercontent.com/37704804/111701428-104c3100-87f8-11eb-8788-288e8e4a6212.png)
+
+![Screenshot (72)](https://user-images.githubusercontent.com/37704804/111405796-5dac8f00-868e-11eb-82d5-dd5578375999.png)
 ![Screenshot (78)](https://user-images.githubusercontent.com/37704804/111663872-7328d280-87ce-11eb-9c04-4cc2cc7e2935.png)
 ![Screenshot (61)](https://user-images.githubusercontent.com/37704804/111663627-3d83e980-87ce-11eb-88d0-3333ba3a9b43.png)
 ![Screenshot (57)](https://user-images.githubusercontent.com/37704804/111663639-407eda00-87ce-11eb-8fec-3cee041e125d.png)
