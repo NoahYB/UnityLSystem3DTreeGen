@@ -19,7 +19,6 @@ TODO:<br />
   Keep improving mesh generation,<br />
   Create UI for customization of trees and shapes<br />
 Examples of Randomly Generated Branching Structures
-![Screenshot (198)](https://user-images.githubusercontent.com/37704804/113341188-bbbdb100-92e1-11eb-9cdb-83a757d7abce.png)
 ![Screenshot (223)](https://user-images.githubusercontent.com/37704804/113341206-c37d5580-92e1-11eb-8c57-358c15d6c5b7.png)
 ![Screenshot (224)](https://user-images.githubusercontent.com/37704804/113341215-c710dc80-92e1-11eb-9e2b-3359d63ae132.png)
 ![Screenshot (214)](https://user-images.githubusercontent.com/37704804/113341259-d3953500-92e1-11eb-810e-8aaee337c580.png)
