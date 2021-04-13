@@ -1,7 +1,7 @@
 
 # LSystem3DTreeGen
 ![Screenshot (96)](https://user-images.githubusercontent.com/37704804/112577533-b3c9b280-8db1-11eb-973d-a31f6210302a.png)
-## in-depth explanation and write up available here https://noahbrinton.com/LSystemWriteUp/ <br /><br />
+## in-depth explanation and write up available [here](https://docs.google.com/document/d/1wOnALqG6Zs94j6kv2VrJsM6k5TIYVNZiWZ8kfZLY55Q/edit?usp=sharing) <br /><br />
 Program that creates 3D L Systems in Unity mainly to be used for creating trees, <br />
 Compatible with both parametric and non-parametric L Systems, and Tropisms, <br />
 Creates Custom meshes for L Systems and provides Cartoon-shaders for both leaves and trees, <br />
